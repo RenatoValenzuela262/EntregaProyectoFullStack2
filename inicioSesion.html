@@ -6,21 +6,19 @@
     <link rel="stylesheet" href="css/estilosFormularios.css">
     <script type="module" defer src="javascript/login.js"></script>
     <title>Inicio de sesión</title>
-</head>
-<body>
 <header>
   <a href="inicio.html">
     <img src="imagenes/Logo3.png" alt="Logo MundoGolosín" class="logo">
   </a>
-  <nav>
-    <a href="productos.html">Productos</a>
-    <a href="contacto.html">Contáctanos</a>
-    <a href="nosotros.html">Sobre Nosotros</a>
-    <a href="inicioSesion.html">Iniciar Sesión</a>
-    <a href="registrarse.html">Registrarse</a>
-    
-  </nav>
-</header>
+ <nav>
+  <a href="productos.html">Productos</a>
+  <a href="contacto.html">Contáctanos</a>
+  <a href="nosotros.html">Sobre Nosotros</a>
+  <a href="inicioSesion.html">Iniciar Sesión</a>
+  <a href="registrarse.html">Registrarse</a>
+  <span id="saludo-usuario"></span>
+  <button id="btn-cerrar-sesion" style="display: none;">Cerrar sesión</button>
+</nav>
 
     <div class="contenedor-comun">
         <div class="formulario">
@@ -47,5 +45,28 @@
             </p>
         </div>
     </div>
+
+
 </body>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const usuarioActivo = JSON.parse(localStorage.getItem("usuarioActivo"));
+
+  if (usuarioActivo) {
+    const saludo = document.getElementById("saludo-usuario");
+    saludo.textContent = `👋 Hola, ${usuarioActivo.nombre}`;
+    saludo.style.marginLeft = "10px";
+    saludo.style.fontWeight = "bold";
+
+    const cerrarBtn = document.getElementById("btn-cerrar-sesion");
+    cerrarBtn.style.display = "inline-block";
+    cerrarBtn.onclick = function () {
+      localStorage.removeItem("usuarioActivo");
+      alert("Sesión cerrada");
+      window.location.href = "inicio.html";
+    };
+  }
+});
+</script>
+
 </html>

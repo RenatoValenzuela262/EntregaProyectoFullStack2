@@ -1,30 +1,45 @@
-<main class="main-content">
-  <h2>🍬 Productos</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Precio</th>
-        <th>Stock</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><input type="text" value="Gomitas Frutales"></td>
-        <td><input type="number" value="1200"></td>
-        <td><input type="number" value="50"></td>
-        <td><button>Guardar</button> <button>Eliminar</button></td>
-      </tr>
-    </tbody>
-  </table>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Productos | MundoGolosín Admin</title>
+  <link rel="stylesheet" href="css/productosAdmin.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="../imagenes/Logo3.png" alt="Logo MundoGolosín">
+      <h2>MundoGolosín</h2>
+    </div>
+    <nav>
+      <a href="index.html">Órdenes</a>
+      <a href="productos.html" class="activo">Productos</a>
+      <a href="usuarios.html">Usuarios</a>
+    </nav>
+  </aside>
 
-  <h3>➕ Agregar nuevo producto</h3>
-  <form>
-    <input type="text" placeholder="Nombre del producto" required>
-    <input type="number" placeholder="Precio" required>
-    <input type="number" placeholder="Stock" required>
-    <input type="file" accept="image/*">
-    <button type="submit">Agregar</button>
-  </form>
-</main>
+  <main class="contenido">
+    <header class="encabezado">
+      <h1>Gestión de Productos</h1>
+    </header>
+
+    <section class="tabla-contenedor">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-productos">
+          <!-- Los productos se insertan aquí dinámicamente -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="../javascript/productosAdmin.js"></script>
+</body>
+</html>

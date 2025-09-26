@@ -41,8 +41,8 @@ function confirmarCompra() {
     return;
   }
 
-  const cliente = prompt("Ingresa tu nombre para confirmar la compra:");
-  if (!cliente) return;
+  const usuarioActivo = JSON.parse(localStorage.getItem("usuarioActivo"));
+  const cliente = usuarioActivo ? usuarioActivo.nombre : "Invitado";
 
   const ordenes = JSON.parse(localStorage.getItem("ordenes")) || [];
   const fecha = new Date().toISOString().split('T')[0];
@@ -64,5 +64,6 @@ function confirmarCompra() {
   alert("¡Compra confirmada y órdenes registradas!");
   mostrarCarrito();
 }
+
 
 window.onload = mostrarCarrito;

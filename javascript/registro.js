@@ -7,6 +7,24 @@ const comuna = document.getElementById('comunas')
 const form = document.getElementById('form')
 const errorElement = document.getElementById('error')
 
+// ✅ Insertar administrador si no existe
+let usuarios = JSON.parse(localStorage.getItem('usuarios')) || []
+const adminExiste = usuarios.some(user => user.email === "admin@duocuc.cl")
+
+if (!adminExiste) {
+    const admin = {
+        id: Date.now(),
+        nombre: "Administrador",
+        email: "admin@duocuc.cl",
+        password: "admin123",
+        region: "Metropolitana",
+        comuna: "Santiago",
+        fechaRegistro: new Date().toLocaleString('es-ES')
+    }
+    usuarios.push(admin)
+    localStorage.setItem('usuarios', JSON.stringify(usuarios))
+}
+
 form.addEventListener('submit', (e) => {
     let messages = []
     
@@ -37,7 +55,6 @@ form.addEventListener('submit', (e) => {
     } else {
         e.preventDefault() // Prevenir envío del formulario
         
-        // Guardar en LocalStorage
         const usuarioData = {
             id: Date.now(),
             nombre: nombreCompleto.value,
@@ -48,10 +65,6 @@ form.addEventListener('submit', (e) => {
             fechaRegistro: new Date().toLocaleString('es-ES')
         }
         
-        // Obtener usuarios existentes o crear array vacío
-        let usuarios = JSON.parse(localStorage.getItem('usuarios')) || []
-        
-        // Verificar si el email ya existe
         const emailExiste = usuarios.some(user => user.email === email.value)
         if (emailExiste) {
             errorElement.style.color = 'red'
@@ -59,20 +72,13 @@ form.addEventListener('submit', (e) => {
             return
         }
         
-        // Agregar nuevo usuario
         usuarios.push(usuarioData)
-        
-        // Guardar en LocalStorage
         localStorage.setItem('usuarios', JSON.stringify(usuarios))
-        
-        // Mensaje de éxito
+        localStorage.setItem('usuarioActivo', JSON.stringify(usuarioData))
+
         errorElement.style.color = 'green'
         errorElement.innerText = '✅ Registro exitoso! Datos guardados.'
-        
-        // Limpiar formulario
         form.reset()
-        
-        // Opcional: Mostrar en consola
         console.log('Usuario guardado:', usuarioData)
     }
 })
@@ -86,7 +92,7 @@ function verUsuarios() {
 
 window.verUsuarios = verUsuarios
 
-// Funciones que comparten registro.js y login.js
+// Funciones compartidas
 export function validarCorreo(correo) {
     const dominiosPermitidos = ['@duocuc.cl', '@profesor.duoc.cl', '@gmail.com'];
     return dominiosPermitidos.some(dominio => correo.toLowerCase().endsWith(dominio));
@@ -106,7 +112,7 @@ export function buscarUsuarioPorEmail(email) {
     return usuarios.find(user => user.email === email);
 }
 
-// Función para exportar a JSON
+// Exportar a JSON
 function exportarJSON() {
     const usuarios = JSON.parse(localStorage.getItem('usuarios')) || []
     const jsonString = JSON.stringify(usuarios, null, 2)
@@ -120,7 +126,7 @@ function exportarJSON() {
     URL.revokeObjectURL(url)
 }
 
-// Función para limpiar datos
+// Limpiar datos
 function limpiarDatos() {
     localStorage.removeItem('usuarios')
     errorElement.style.color = 'blue'

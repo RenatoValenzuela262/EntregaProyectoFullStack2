@@ -40,15 +40,22 @@ formLogin.addEventListener('submit', (e) => {
         return;
     }
 
-    // Si pasa todo → login exitoso
+    // Guardar sesión
+    localStorage.setItem("usuarioActivo", JSON.stringify(usuario));
+
+    // Mostrar mensaje de éxito
     errorElementLogin.style.color = 'green';
     errorElementLogin.innerText = '✅ Inicio de sesión exitoso';
 
-    // Guardar sesión
-    localStorage.setItem('usuarioLogueado', JSON.stringify(usuario));
-
-    // Redirigir al dashboard
+    // Redirigir según tipo de usuario
     setTimeout(() => {
-        window.location.href = 'dashboard.html';
-    }, 2000);
+        if (
+            usuario.email === "admin@duocuc.cl" &&
+            usuario.password === "admin123"
+        ) {
+            window.location.href = "admin/index.html";
+        } else {
+            window.location.href = "dashboard.html"; // o "inicio.html" si prefieres
+        }
+    }, 1500);
 });
