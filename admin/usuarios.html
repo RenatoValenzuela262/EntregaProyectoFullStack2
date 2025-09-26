@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Usuarios | MundoGolosín Admin</title>
+    <link rel="stylesheet" href="css/ordenes.css">
+    <link rel="stylesheet" href="css/usuarios.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="../imagenes/Logo3.png" alt="Logo MundoGolosín">
+            <h2>MundoGolosín</h2>
+        </div>
+        <nav>
+            <a href="index.html">Dashboard</a>
+            <a href="ordenes.html">Órdenes</a>
+            <a href="productos.html">Productos</a>
+            <a href="usuarios.html">Usuarios</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <h1>Usuarios Registrados</h1>
+        <div class="usuarios-header">
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="btn-refresh">Actualizar Lista</button>
+                <button class="btn btn-primary" id="btn-nuevo-usuario">Nuevo Usuario</button>
+            </div>
+        </div>
+
+        <div class="usuarios-container">
+            <div id="usersList"></div>
+        </div>
+    </main>
+
+    <!-- Modal para crear usuario -->
+    <div id="modal-usuario" class="modal">
+        <div class="modal-contenido">
+            <h2>Crear nuevo usuario</h2>
+            <form id="form-admin-usuario">
+                <input type="text" id="nombreAdmin" placeholder="Nombre completo" required>
+                <input type="email" id="emailAdmin" placeholder="Correo electrónico" required>
+                <input type="password" id="passwordAdmin" placeholder="Contraseña" required>
+                <input type="password" id="repasswordAdmin" placeholder="Repetir contraseña" required>
+                <select id="regionAdmin" required>
+                    <option value="">Selecciona región</option>
+                    <option value="Metropolitana">Metropolitana</option>
+                </select>
+                <select id="comunaAdmin" required>
+                    <option value="">Selecciona comuna</option>
+                    <option value="cerrillos">Cerrillos</option>
+                    <option value="cerro-navia">Cerro Navia</option>
+                    <option value="conchali">Conchalí</option>
+                    <option value="el-bosque">El Bosque</option>
+                    <option value="estacion-central">Estación Central</option>
+                    <option value="huechuraba">Huechuraba</option>
+                    <option value="independencia">Independencia</option>
+                    <option value="la-cisterna">La Cisterna</option>
+                    <option value="la-florida">La Florida</option>
+                    <option value="la-granja">La Granja</option>
+                    <option value="la-pintana">La Pintana</option>
+                    <option value="la-reina">La Reina</option>
+                    <option value="las-condes">Las Condes</option>
+                    <option value="lo-barnechea">Lo Barnechea</option>
+                    <option value="lo-espejo">Lo Espejo</option>
+                    <option value="lo-prado">Lo Prado</option>
+                    <option value="macul">Macul</option>
+                    <option value="maipu">Maipú</option>
+                    <option value="nunoa">Ñuñoa</option>
+                    <option value="pedro-aguirre-cerda">Pedro Aguirre Cerda</option>
+                    <option value="penalolen">Peñalolén</option>
+                    <option value="providencia">Providencia</option>
+                    <option value="pudahuel">Pudahuel</option>
+                    <option value="quilicura">Quilicura</option>
+                    <option value="quinta-normal">Quinta Normal</option>
+                    <option value="recoleta">Recoleta</option>
+                    <option value="renca">Renca</option>
+                    <option value="san-joaquin">San Joaquín</option>
+                    <option value="san-miguel">San Miguel</option>
+                    <option value="san-ramon">San Ramón</option>
+                    <option value="santiago">Santiago</option>
+                    <option value="vitacura">Vitacura</option>
+                    <option value="puente-alto">Puente Alto</option>
+                    <option value="pirque">Pirque</option>
+                    <option value="san-jose-de-maipo">San José de Maipo</option>
+                    <option value="colina">Colina</option>
+                    <option value="lampa">Lampa</option>
+                    <option value="tiltil">Tiltil</option>
+                    <option value="san-bernardo">San Bernardo</option>
+                    <option value="buin">Buin</option>
+                    <option value="calera-de-tango">Calera de Tango</option>
+                    <option value="paine">Paine</option>
+                    <option value="melipilla">Melipilla</option>
+                    <option value="alhue">Alhué</option>
+                    <option value="curacavi">Curacaví</option>
+                    <option value="maria-pinto">María Pinto</option>
+                    <option value="san-pedro">San Pedro</option>
+                    <option value="talagante">Talagante</option>
+                    <option value="el-monte">El Monte</option>
+                    <option value="isla-de-maipo">Isla de Maipo</option>
+                    <option value="padre-hurtado">Padre Hurtado</option>
+                    <option value="penaflor">Peñaflor</option>
+                </select>
+                <div id="error-admin" class="error"></div>
+                <div class="botones-modal">
+                    <button type="submit">Crear usuario</button>
+                    <button type="button" id="cerrar-modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="js/usuarios.js"></script>
+</body>
+</html>
