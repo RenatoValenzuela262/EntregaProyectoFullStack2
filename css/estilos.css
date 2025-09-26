@@ -1,0 +1,237 @@
+h1{
+    color: blueviolet;
+}
+
+.paginas{
+    color: rgb(83, 17, 17);
+    background-color: aquamarine;
+    padding: 20px;
+    width: 25%;
+}
+
+/* Navegación */
+nav {
+    display: flex;
+    justify-content: center;
+    background-color: var(--contenedor);
+    padding: 10px 0;
+}
+
+nav a {
+    color: var(--texto-principal);
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: var(--boton-hover);
+}
+
+
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navegación */
+.navegacion {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.navegacion a {
+    color: white;
+    text-decoration: none;
+    margin: 0 20px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    transition: background-color 0.3s;
+}
+
+.navegacion a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.navegacion a.activo {
+    background-color: rgba(255, 255, 255, 0.3);
+    font-weight: bold;
+}
+
+/* Contenedor principal */
+.contenedor-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    padding: 40px 20px;
+}
+
+/* Formulario */
+.formulario-login {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.formulario-login h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 28px;
+}
+
+.grupo-formulario {
+    margin-bottom: 20px;
+}
+
+.grupo-formulario label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: bold;
+}
+
+.grupo-formulario input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.grupo-formulario input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+/* Opciones */
+.opciones {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.olvidaste {
+    color: #667eea;
+    text-decoration: none;
+}
+
+.olvidaste:hover {
+    text-decoration: underline;
+}
+
+/* Botones */
+.btn-login {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+}
+
+/* Separador */
+.separador {
+    text-align: center;
+    margin: 30px 0;
+    position: relative;
+}
+
+.separador span {
+    background: white;
+    padding: 0 15px;
+    color: #777;
+    position: relative;
+    z-index: 1;
+}
+
+.separador::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #ddd;
+}
+
+/* Redes sociales */
+.redes-sociales {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.btn-google, .btn-facebook {
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.btn-google:hover {
+    background-color: #f8f9fa;
+}
+
+.btn-facebook:hover {
+    background-color: #f8f9fa;
+}
+
+.registro-link {
+    text-align: center;
+    color: #666;
+}
+
+.registro-link a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.registro-link a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .formulario-login {
+        padding: 30px 20px;
+    }
+    
+    .opciones {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+}

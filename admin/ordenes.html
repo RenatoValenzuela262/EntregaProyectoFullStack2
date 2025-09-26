@@ -1,0 +1,18 @@
+<tbody id="tabla-ordenes"></tbody>
+
+<script>
+const ordenes = JSON.parse(localStorage.getItem("ordenes")) || [];
+const tabla = document.getElementById("tabla-ordenes");
+
+ordenes.forEach(orden => {
+  const fila = document.createElement("tr");
+  fila.innerHTML = `
+    <td>${orden.fecha}</td>
+    <td>${orden.cliente}</td>
+    <td>${orden.producto}</td>
+    <td>${orden.estado}</td>
+    <td>$${orden.total}</td>
+  `;
+  tabla.appendChild(fila);
+});
+</script>

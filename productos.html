@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>MundoGolosín</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <a href="inicio.html">
+    <img src="imagenes/Logo3.png" alt="Logo MundoGolosín" class="logo">
+  </a>
+  <nav>
+    <a href="productos.html">Productos</a>
+    <a href="contacto.html">Contáctanos</a>
+    <a href="nosotros.html">Sobre Nosotros</a>
+    <a href="login.html">Iniciar Sesión</a>
+  </nav>
+</header>
+
+  <main>
+    <section class="productos">
+      <!-- Producto 1 -->
+      <div class="producto">
+        <img src="imagenes/gomitasdearcoiris.png" alt="Gomitas Arcoiris">
+        <h3>Gomitas Arcoiris</h3>
+        <p>Precio: $1.500</p>
+        <p>Stock: <span id="stock-1">10</span></p>
+        <button onclick="agregarAlCarrito('Gomitas Arcoiris', 1500, 1)">Agregar al carrito</button>
+      </div>
+
+      <!-- Producto 2 -->
+      <div class="producto">
+        <img src="imagenes/bomboneschocolate.png" alt="Bombones de Chocolate">
+        <h3>Bombones de Chocolate</h3>
+        <p>Precio: $2.000</p>
+        <p>Stock: <span id="stock-2">8</span></p>
+        <button onclick="agregarAlCarrito('Bombones de Chocolate', 2000, 2)">Agregar al carrito</button>
+      </div>
+
+      <!-- Producto 3 -->
+      <div class="producto">
+        <img src="imagenes/caramelosacidos.png" alt="Caramelos Ácidos">
+        <h3>Caramelos Ácidos</h3>
+        <p>Precio: $1.200</p>
+        <p>Stock: <span id="stock-3">12</span></p>
+        <button onclick="agregarAlCarrito('Caramelos Ácidos', 1200, 3)">Agregar al carrito</button>
+      </div>
+
+      <!-- Producto 4 -->
+      <div class="producto">
+        <img src="imagenes/merengues.png" alt="Dulces de Merengue">
+        <h3>Dulces de Merengue</h3>
+        <p>Precio: $1.000</p>
+        <p>Stock: <span id="stock-4">15</span></p>
+        <button onclick="agregarAlCarrito('Dulces de Merengue', 1000, 4)">Agregar al carrito</button>
+      </div>
+
+      <!-- Producto 5 -->
+      <div class="producto">
+        <img src="imagenes/paletadulce.png" alt="Paleta Frutal">
+        <h3>Paleta Frutal</h3>
+        <p>Precio: $800</p>
+        <p>Stock: <span id="stock-5">20</span></p>
+        <button onclick="agregarAlCarrito('Paleta Frutal', 800, 5)">Agregar al carrito</button>
+      </div>
+    </section>
+  </main>
+
+<aside class="carrito">
+  <h2> Carrito</h2>
+  <p>Haz clic para ver tu carrito completo</p>
+  <a href="carrito.html">
+    <button>Ver carrito</button>
+  </a>
+</aside>
+
+
+  <footer>
+    <p>&copy; 2025 MundoGolosín. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="javascript/script.js"></script>
+</body>
+</html>
+

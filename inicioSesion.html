@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/estilosFormularios.css">
+    <script type="module" defer src="javascript/login.js"></script>
+    <title>Inicio de sesión</title>
+</head>
+<body>
+<header>
+  <a href="inicio.html">
+    <img src="imagenes/Logo3.png" alt="Logo MundoGolosín" class="logo">
+  </a>
+  <nav>
+    <a href="productos.html">Productos</a>
+    <a href="contacto.html">Contáctanos</a>
+    <a href="nosotros.html">Sobre Nosotros</a>
+    <a href="inicioSesion.html">Iniciar Sesión</a>
+    <a href="registrarse.html">Registrarse</a>
+    
+  </nav>
+</header>
+
+    <div class="contenedor-comun">
+        <div class="formulario">
+            <div id="error-login"></div>
+            <h2>Iniciar Sesión</h2>
+
+            <!-- Solo UN formulario -->
+            <form id="form-login" action="#">
+                <div class="grupo-formulario">
+                    <label for="email">Correo electrónico:</label>
+                    <input type="email" id="email-login" name="email" required>
+                </div>
+
+                <div class="grupo-formulario">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password-login" name="password" required>
+                </div>
+
+                <button type="submit" class="btn_register">Ingresar</button>
+            </form>
+
+            <p class="registro-link">
+                ¿No tienes cuenta? <a href="registrarse.html">Regístrate aquí</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
