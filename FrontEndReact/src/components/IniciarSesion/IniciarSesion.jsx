@@ -1,5 +1,5 @@
-function IniciarSesion() {
-  return <h1>Iniciar sesion</h1>;
-}
+import "./IniciarSesion.css";
+
+function IniciarSesion() {}
 
 export default IniciarSesion;
