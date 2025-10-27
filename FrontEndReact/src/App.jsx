@@ -32,13 +32,13 @@ function App() {
         </Routes>
       </Layout>
 
-      <AdmLayout>
+      {/* <AdmLayout>
         <Routes>
           <Route path="/Ordenes" element={<Ordenes />} />
           <Route path="/AdmProductos" element={<AdmProductos />} />
           <Route path="/Usuarios" element={<Usuarios />} />
         </Routes>
-      </AdmLayout>
+      </AdmLayout> */}
     </>
   );
 }
