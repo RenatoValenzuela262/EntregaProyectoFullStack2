@@ -51,17 +51,18 @@ function Registrarse() {
     }
 
     const usuario = {
-      nombre: userData.nombreCompleto,
-      email: userData.correo,
+      nombreCompleto: userData.nombreCompleto,
+      correo: userData.correo,
       contrasenia: userData.contrasenia,
       region: userData.region,
       comuna: userData.comuna,
       telefono: userData.telefono,
+      estado: true,
     };
 
     try {
       // 1. Llama a 'fetch' con la URL y las opciones
-      const response = await fetch("http://localhost:8080/api/usuario", {
+      const response = await fetch("http://localhost:8080/api/usuarios", {
         method: "POST", // Tienes que especificar el método
         headers: {
           // Tienes que decirle a Spring Boot que estás enviando JSON

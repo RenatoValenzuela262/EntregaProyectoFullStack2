@@ -1,225 +1,169 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Navbar } from "../../componentes/Navbar/Navbar";
-import "./CrearProducto.css";
+import { useState } from "react";
+import "./Productos.css";
 
-const API_BASE_URL = "http://localhost:8080/api";
-
-export function CrearProducto() {
-  const navigate = useNavigate();
-
-  const [producto, setProducto] = useState({
+function CrearProducto({ onProductoCreado, onCancelar }) {
+  const [productoData, setProductoData] = useState({
     nombre: "",
+    categoria: "",
     descripcion: "",
     precio: "",
-    categoria: "",
+    stock: "",
   });
 
-  const [categorias, setCategorias] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [loadingCategorias, setLoadingCategorias] = useState(true);
-
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/categorias`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error al cargar categorías");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setCategorias(data);
-        setLoadingCategorias(false); // ← Termina la carga exitosa
-      })
-      .catch((error) => {
-        console.error("Error al obtener las categorías:", error);
-        setError("No se pudieron cargar las categorías");
-        setLoadingCategorias(false); // ← Termina la carga con error
-      });
-  }, []);
+  const [imagen, setImagen] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProducto((prev) => ({
-      ...prev,
+    setProductoData((prevData) => ({
+      ...prevData,
       [name]: value,
     }));
   };
 
+  const handleFileChange = (e) => {
+    setImagen(e.target.files[0]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    setLoading(true);
 
-    const productoParaEnviar = {
-      nombre: producto.nombre.trim(),
-      descripcion: producto.descripcion.trim(),
-      precio: parseFloat(producto.precio),
-      categoria: { id: parseInt(producto.categoria, 10) },
-    };
+    if (!imagen) {
+      alert("Por favor, selecciona una imagen.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("imagen", imagen);
+    formData.append("producto", JSON.stringify(productoData));
 
     try {
-      const response = await fetch(`${API_BASE_URL}/productos`, {
+      const response = await fetch("http://localhost:8080/api/productos", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(productoParaEnviar),
+        body: formData,
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || "Error al crear el producto");
+        throw new Error("Error al crear producto");
       }
 
-      navigate("/inventario", {
-        state: { message: "Producto creado exitosamente" },
-      });
-    } catch (err) {
-      setError(err.message || "No se pudo crear el producto");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCancel = () => {
-    const tieneContenido = Object.values(producto).some((val) => val !== "");
-
-    if (
-      !tieneContenido ||
-      window.confirm(
-        "¿Está seguro de cancelar? Se perderán los datos ingresados."
-      )
-    ) {
-      navigate("/inventario");
+      alert("¡Producto creado con éxito!");
+      onProductoCreado();
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
     }
   };
 
   return (
     <>
-      <Navbar />
-
-      <div className="crear-producto-container">
-        <div className="form-card">
-          <h2>Crear Producto</h2>
-          {error && (
-            <div className="error-message">
-              {error}
-              <button onClick={() => setError(null)} className="error-close">
-                ×
-              </button>
-            </div>
-          )}
-          {loadingCategorias ? (
-            <div className="loading">Cargando categorías...</div>
-          ) : (
-            <form onSubmit={handleSubmit}>
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="nombre">
-                    Nombre del producto <span className="required">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="nombre"
-                    name="nombre"
-                    value={producto.nombre}
-                    onChange={handleChange}
-                    disabled={loading}
-                    maxLength={100}
-                    placeholder="Ej: Paleta de dulce"
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="precio">
-                    Precio <span className="required">*</span>
-                  </label>
-                  <div className="price-input">
-                    <span className="currency">$</span>
-                    <input
-                      type="number"
-                      id="precio"
-                      name="precio"
-                      step="1"
-                      min="1"
-                      value={producto.precio}
-                      onChange={handleChange}
-                      disabled={loading}
-                      placeholder="1000"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="descripcion">
-                  Descripción <span className="required">*</span>
-                </label>
-                <textarea
-                  id="descripcion"
-                  name="descripcion"
-                  rows="4"
-                  value={producto.descripcion}
-                  onChange={handleChange}
-                  disabled={loading}
-                  maxLength={500}
-                  placeholder="Características principales del producto..."
-                  required
-                />
-                <small className="char-count">
-                  {producto.descripcion.length}/500 caracteres
-                </small>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="categoria">
-                  Categoría <span className="required">*</span>
-                </label>
-                <select
-                  id="categoria"
-                  name="categoria"
-                  value={producto.categoria}
-                  onChange={handleChange}
-                  disabled={loading || categorias.length === 0}
-                  required
-                >
-                  <option value="">Seleccione una categoría</option>
-                  {categorias.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.nombre}
-                    </option>
-                  ))}
-                </select>
-                {categorias.length === 0 && !loadingCategorias && (
-                  <small className="error-text">
-                    No hay categorías disponibles
-                  </small>
-                )}
-              </div>
-
-              <div className="form-actions">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="btn-primary"
-                >
-                  {loading ? "Guardando..." : "Crear Producto"}
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCancel}
-                  disabled={loading}
-                  className="btn-secondary"
-                >
-                  Cancelar
-                </button>
-              </div>
-            </form>
-          )}
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="nombre-input" className="form-label">
+            Nombre Producto
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="nombre-input"
+            required
+            name="nombre"
+            value={productoData.nombre}
+            onChange={handleChange}
+          />
         </div>
-      </div>
+
+        <div className="mb-3">
+          <label htmlFor="categoria-input" className="form-label">
+            Categoría
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="categoria-input"
+            required
+            name="categoria"
+            value={productoData.categoria}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="descripcion-input" className="form-label">
+            Descripcion
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="descripcion-input"
+            required
+            name="descripcion"
+            value={productoData.descripcion}
+            onChange={handleChange}
+            size={3}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="precio-input" className="form-label">
+            Precio
+          </label>
+          <input
+            type="number"
+            className="form-control"
+            id="precio-input"
+            required
+            name="precio"
+            value={productoData.precio}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="stock-input" className="form-label">
+            Stock
+          </label>
+          <input
+            type="number"
+            className="form-control"
+            id="stock-input"
+            required
+            name="stock"
+            value={productoData.stock}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="imagen-input" className="form-label">
+            Imagen del Producto
+          </label>
+          <input
+            type="file"
+            className="form-control"
+            id="imagen-input"
+            required
+            name="imagen"
+            accept="image/png, image/jpeg"
+            onChange={handleFileChange}
+          />
+        </div>
+
+        <div className="d-flex justify-content-end">
+          <button
+            type="button"
+            onClick={onCancelar}
+            className="btn boton-cancelar me-2"
+          >
+            Cancelar
+          </button>
+
+          <button type="submit" className="btn color-boton">
+            Crear Producto
+          </button>
+        </div>
+      </form>
     </>
   );
 }
+
+export default CrearProducto;

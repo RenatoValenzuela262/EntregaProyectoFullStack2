@@ -1,146 +1,90 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Modal } from "react-bootstrap";
+import CrearProducto from "./CrearProducto";
 
-function Productos() {
+function AdmProductos() {
   const [productos, setProductos] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
-  const cargarProductos = async () => {
+  const fetchProductos = async () => {
     try {
       const response = await fetch("http://localhost:8080/api/productos");
       if (!response.ok) {
-        throw new Error("Error en la respuesta del servidor");
+        throw new Error("No se pudieron cargar los productos");
       }
-
       const data = await response.json();
-      console.log("Respuesta del backend:", data);
-
-      const productosNormalizados = data.map((p) => ({
-        ...p,
-        activo: p.activo === true || p.activo === "true",
-      }));
-
-      setProductos(productosNormalizados);
+      setProductos(data);
     } catch (error) {
-      console.error("Error al obtener los productos:", error);
+      console.error(error);
+      alert(error.message);
     }
   };
 
   useEffect(() => {
-    cargarProductos();
+    fetchProductos();
   }, []);
 
-  const handleDesactivar = (id, nombre) => {
-    if (
-      window.confirm(`¿Estás seguro de desactivar el producto "${nombre}"?`)
-    ) {
-      fetch(`http://localhost:8080/api/productos/${id}/desactivar`, {
-        method: "PATCH",
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Error al desactivar el producto");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log("Producto desactivado:", data);
-          alert("Producto desactivado exitosamente");
-          cargarProductos();
-        })
-        .catch((error) => {
-          console.error("Error al desactivar:", error);
-          alert("Error al desactivar el producto");
-        });
-    }
+  const handleCerrarModal = () => setShowModal(false);
+  const handleAbrirModal = () => setShowModal(true);
+
+  const handleProductoCreado = () => {
+    handleCerrarModal();
+    fetchProductos();
   };
 
   return (
     <>
-      <div className="container mi-tabla">
-        <h3 style={{ marginBottom: "20px" }}>Inventario de productos</h3>
-        <div className="row mb-3">
-          <div className="col-12 text-end">
-            <Link
-              className="btn btn-outline-dark"
-              style={{ fontSize: "13px" }}
-              to="/crear-producto"
-            >
-              Crear Producto
-            </Link>
-          </div>
-        </div>
+      <div className="container mt-4">
+        <h2 className="mb-3">Gestión de Productos</h2>
 
-        <div className="row">
-          <div className="col-md">
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  <th>Id Producto</th>
-                  <th>Nombre</th>
-                  <th>Descripción</th>
-                  <th>Precio</th>
-                  <th>Stock</th>
-                  <th>Desactivar/Eliminar </th>
-                </tr>
-              </thead>
-              <tbody>
-                {productos.map((prod) => (
-                  <tr
-                    key={prod.id}
-                    style={{
-                      opacity: prod.activo ? 1 : 0.5,
-                      backgroundColor: prod.activo ? "white" : "#f8f8f8",
-                    }}
-                  >
-                    <td>{prod.id}</td>
-                    <td>{prod.nombre}</td>
-                    <td>{prod.descripcion}</td>
-                    <td>{prod.precio}</td>
-                    <td>
-                      {prod.activo ? (
-                        <Link
-                          className="btn btn-outline-primary"
-                          style={{ fontSize: "13px" }}
-                          to={`/editar-producto/${prod.id}`}
-                        >
-                          Editar Producto
-                        </Link>
-                      ) : (
-                        <button
-                          className="btn btn-outline-secondary"
-                          style={{
-                            cursor: "not-allowed",
-                            pointerEvents: "none",
-                          }}
-                          disabled
-                        >
-                          Editar Producto
-                        </button>
-                      )}
-                    </td>
-                    <td>
-                      {prod.activo ? (
-                        <button
-                          className="btn btn-sm btn-outline-danger"
-                          onClick={() => handleDesactivar(prod.id, prod.nombre)}
-                        >
-                          Desactivar
-                        </button>
-                      ) : (
-                        <button className="btn btn-sm btn-secondary" disabled>
-                          Desactivado
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <button
+          onClick={handleAbrirModal}
+          className="btn btn-primary mb-3 color-boton"
+        >
+          Crear Producto
+        </button>
+
+        <table className="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Categoria</th>
+              <th>Descripcion</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            {productos.map((producto) => (
+              <tr key={producto.id}>
+                <td>{producto.id}</td>
+                <td>{producto.nombre}</td>
+                <td>{producto.categoria}</td>
+                <td>{producto.descripcion}</td>
+                <td>{producto.precio}</td>
+                <td>{producto.stock}</td>
+                <td>{producto.fecha}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <Modal show={showModal} onHide={handleCerrarModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Crear Nuevo Producto</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <CrearProducto
+              onProductoCreado={handleProductoCreado}
+              onCancelar={handleCerrarModal}
+            />
+          </Modal.Body>
+        </Modal>
       </div>
     </>
   );
 }
 
-export default Productos;
+export default AdmProductos;

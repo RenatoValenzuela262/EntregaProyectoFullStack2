@@ -1,0 +1,9 @@
+.color-boton {
+  background-color: #d73385 !important;
+  color: white !important;
+}
+
+.boton-cancelar {
+  background-color: rgb(102, 102, 102) !important;
+  color: white !important;
+}
