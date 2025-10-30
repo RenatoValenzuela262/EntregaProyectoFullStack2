@@ -34,7 +34,7 @@ public class ProductoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> verUsuario(@PathVariable Long id) {
+    public ResponseEntity<?> verProducto(@PathVariable Long id) {
         Optional<Producto> productoOptional = service.findById(id);
         if (productoOptional.isPresent()){
             return ResponseEntity.ok(productoOptional.orElseThrow());
@@ -47,7 +47,7 @@ public class ProductoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(unProducto));
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<?> modifica(@PathVariable Long id, @RequestBody Producto unProducto){
         Optional<Producto> productoOptional = service.findById(id);
         if (productoOptional.isPresent()){
@@ -57,6 +57,7 @@ public class ProductoController {
             productoExistente.setPrecio(unProducto.getPrecio());
             productoExistente.setStock(unProducto.getStock());
             productoExistente.setCategoria(unProducto.getCategoria());
+            productoExistente.setImagen(unProducto.getImagen());
             productoExistente.setFecha(unProducto.getFecha());
             Producto productoModificado = service.save(productoExistente);
             return ResponseEntity.ok(productoModificado);

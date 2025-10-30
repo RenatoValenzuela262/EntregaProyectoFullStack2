@@ -15,4 +15,8 @@ public interface UsuarioService {
 
     Optional<Usuario> delete(Usuario unUsuario);
 
+    Optional<Usuario> login(String correo, String contrasenia);
+
+
+
 }

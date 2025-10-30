@@ -15,19 +15,20 @@ public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nombre, descripcion, categoria;
+    private String nombre, descripcion, categoria, imagen;
     private Integer precio, stock;
     private LocalDate fecha;
     
     public Producto() {
     }
 
-    public Producto(Long id, String nombre, String descripcion, String categoria, Integer precio, Integer stock,
-            LocalDate fecha) {
+    public Producto(Long id, String nombre, String descripcion, String categoria, String imagen, Integer precio,
+            Integer stock, LocalDate fecha) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.categoria = categoria;
+        this.imagen = imagen;
         this.precio = precio;
         this.stock = stock;
         this.fecha = fecha;
@@ -65,6 +66,14 @@ public class Producto {
         this.categoria = categoria;
     }
 
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
     public Integer getPrecio() {
         return precio;
     }
@@ -88,10 +97,7 @@ public class Producto {
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
-
     
-    
-
     
 
 }

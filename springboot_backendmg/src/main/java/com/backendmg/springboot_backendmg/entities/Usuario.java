@@ -12,31 +12,32 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private String nombreCompleto, correo, contrasenia, region, comuna;
+    private Long id;
+    private String nombreCompleto, correo, contrasenia, region, comuna, tipo;
     private Integer telefono;
     private Boolean estado;
 
     public Usuario() {
     }
 
-    public Usuario(long id, String nombreCompleto, String correo, String contrasenia, String region, String comuna,
-            Integer telefono, Boolean estado) {
+    public Usuario(Long id, String nombreCompleto, String correo, String contrasenia, String region, String comuna,
+            String tipo, Integer telefono, Boolean estado) {
         this.id = id;
         this.nombreCompleto = nombreCompleto;
         this.correo = correo;
         this.contrasenia = contrasenia;
         this.region = region;
         this.comuna = comuna;
+        this.tipo = tipo;
         this.telefono = telefono;
         this.estado = estado;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -80,6 +81,14 @@ public class Usuario {
         this.comuna = comuna;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
     public Integer getTelefono() {
         return telefono;
     }
@@ -95,6 +104,7 @@ public class Usuario {
     public void setEstado(Boolean estado) {
         this.estado = estado;
     }
+    
 
     
 
