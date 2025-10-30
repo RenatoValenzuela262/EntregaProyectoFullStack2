@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./AdmProductos.css";
 
-function CrearProducto({ onProductoCreado, onCancelar }) {
+function EditarProducto({ producto, onProductoEditado, onCancelar }) {
   const [productoData, setProductoData] = useState({
     nombre: "",
     categoria: "",
@@ -9,6 +9,18 @@ function CrearProducto({ onProductoCreado, onCancelar }) {
     precio: "",
     stock: "",
   });
+
+  useEffect(() => {
+    if (producto) {
+      setProductoData({
+        nombre: producto.nombre,
+        categoria: producto.categoria,
+        descripcion: producto.descripcion,
+        precio: producto.precio,
+        stock: producto.stock,
+      });
+    }
+  }, [producto]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,21 +34,24 @@ function CrearProducto({ onProductoCreado, onCancelar }) {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8080/api/productos", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(productoData),
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/productos/${producto.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(productoData),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || "Error al crear producto");
+        throw new Error(errorData.message || "Error al actualizar producto");
       }
 
-      alert("¡Producto creado con éxito!");
-      onProductoCreado();
+      alert("¡Producto actualizado con éxito!");
+      onProductoEditado();
     } catch (error) {
       console.error(error);
       alert(error.message);
@@ -132,7 +147,7 @@ function CrearProducto({ onProductoCreado, onCancelar }) {
           </button>
 
           <button type="submit" className="btn color-boton">
-            Crear Producto
+            Guardar Cambios
           </button>
         </div>
       </form>
@@ -140,4 +155,4 @@ function CrearProducto({ onProductoCreado, onCancelar }) {
   );
 }
 
-export default CrearProducto;
+export default EditarProducto;

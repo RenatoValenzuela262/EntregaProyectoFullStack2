@@ -21,7 +21,7 @@ function App() {
 
   return (
     <>
-      {/* <Layout>
+      <Layout>
         <Routes>
           <Route path="/Home" element={<Home />} />
           <Route path="/Productos" element={<Productos />} />
@@ -30,15 +30,15 @@ function App() {
           <Route path="/IniciarSesion" element={<IniciarSesion />} />
           <Route path="/Registrarse" element={<Registrarse />} />
         </Routes>
-      </Layout> */}
+      </Layout>
 
-      <AdmLayout>
+      {/* <AdmLayout>
         <Routes>
           <Route path="/Ordenes" element={<Ordenes />} />
           <Route path="/AdmProductos" element={<AdmProductos />} />
           <Route path="/Usuarios" element={<Usuarios />} />
         </Routes>
-      </AdmLayout>
+      </AdmLayout> */}
     </>
   );
 }
