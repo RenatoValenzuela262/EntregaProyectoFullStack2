@@ -9,6 +9,7 @@ import Contactanos from "./components/Otros/Contactanos";
 import SobreNosotros from "./components/Otros/SobreNosotros";
 import IniciarSesion from "./components/IniciarSesion/IniciarSesion";
 import Registrarse from "./components/Registrarse/Registrarse";
+import Carrito from "./components/Productos/Carrito.jsx";
 
 import AdmLayout from "./components/Admin/Nav/AdmLayout.jsx";
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/SobreNosotros" element={<SobreNosotros />} />
           <Route path="/IniciarSesion" element={<IniciarSesion />} />
           <Route path="/Registrarse" element={<Registrarse />} />
+          <Route path="/Carrito" element={<Carrito />} />
         </Routes>
       </Layout>
 

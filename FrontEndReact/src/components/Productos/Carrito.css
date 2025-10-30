@@ -1,0 +1,17 @@
+.boton-eliminar {
+  background-color: #81002b !important;
+  color: white !important;
+}
+
+.boton-pagar {
+  background-color: #962b60 !important;
+  color: white !important;
+}
+
+.tabla-carrito {
+  --bs-table-bg: #f7d4bc !important;
+
+  --bs-table-border-color: #000000 !important;
+
+  --bs-table-color: #212529;
+}
