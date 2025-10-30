@@ -9,7 +9,7 @@ public interface ProductoService {
 
     List<Producto> findByAll();
 
-    Optional<Producto> findById(Long id);
+    Optional<Producto> findById(Long idProducto);
 
     Producto save(Producto productoExistente);
 

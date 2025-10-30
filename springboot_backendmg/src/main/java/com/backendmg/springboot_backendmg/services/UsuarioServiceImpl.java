@@ -33,8 +33,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Usuario> findById(Long id){
-        return repository.findById(id);
+    public Optional<Usuario> findById(Long idUsuario){
+        return repository.findById(idUsuario);
     }
 
 
@@ -46,10 +46,10 @@ public class UsuarioServiceImpl implements UsuarioService {
             String encodedPassword = passwordEncoder.encode(unUsuario.getContrasenia());
             unUsuario.setContrasenia(encodedPassword);
             
-        } else if (unUsuario.getId() != null) {
+        } else if (unUsuario.getIdUsuario() != null) {
 
             // se recupera el hash antiguo para no sobreescribirlo con null/vacío.
-            repository.findById(unUsuario.getId()).ifPresent(usuarioDb -> {
+            repository.findById(unUsuario.getIdUsuario()).ifPresent(usuarioDb -> {
                 unUsuario.setContrasenia(usuarioDb.getContrasenia());
             });
         }
@@ -60,7 +60,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     @Transactional
     public Optional<Usuario> delete(Usuario unUsuario) {
-        Optional<Usuario> usuarioOptional = repository.findById(unUsuario.getId());
+        Optional<Usuario> usuarioOptional = repository.findById(unUsuario.getIdUsuario());
         usuarioOptional.ifPresent(usuarioDb -> {
             repository.delete(unUsuario);
         });

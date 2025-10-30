@@ -26,8 +26,8 @@ public class ProductoServiceImpl implements ProductoService{
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Producto> findById(Long id) {
-        return repository.findById(id);
+    public Optional<Producto> findById(Long idProducto) {
+        return repository.findById(idProducto);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class ProductoServiceImpl implements ProductoService{
     @Override
     @Transactional
     public Optional<Producto> delete(Producto unProducto) {
-        Optional<Producto> productoOptional = repository.findById(unProducto.getId());
+        Optional<Producto> productoOptional = repository.findById(unProducto.getIdProducto());
         productoOptional.ifPresent(productoDb ->{
             repository.delete(unProducto);
         });

@@ -33,9 +33,9 @@ public class ProductoController {
         return service.findByAll();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> verProducto(@PathVariable Long id) {
-        Optional<Producto> productoOptional = service.findById(id);
+    @GetMapping("/{idProducto}")
+    public ResponseEntity<?> verProducto(@PathVariable Long idProducto) {
+        Optional<Producto> productoOptional = service.findById(idProducto);
         if (productoOptional.isPresent()){
             return ResponseEntity.ok(productoOptional.orElseThrow());
         }
@@ -47,9 +47,9 @@ public class ProductoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(unProducto));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> modifica(@PathVariable Long id, @RequestBody Producto unProducto){
-        Optional<Producto> productoOptional = service.findById(id);
+    @PutMapping("/{idProducto}")
+    public ResponseEntity<?> modifica(@PathVariable Long idProducto, @RequestBody Producto unProducto){
+        Optional<Producto> productoOptional = service.findById(idProducto);
         if (productoOptional.isPresent()){
             Producto productoExistente = productoOptional.get();
             productoExistente.setNombre(unProducto.getNombre());
@@ -65,10 +65,10 @@ public class ProductoController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id){
+    @DeleteMapping("/{idProducto}")
+    public ResponseEntity<?> eliminar(@PathVariable Long idProducto){
         Producto unProducto = new Producto();
-        unProducto.setId(id);
+        unProducto.setIdProducto(idProducto);
         Optional<Producto> productoOptional = service.delete(unProducto);
         if(productoOptional.isPresent()){
             return ResponseEntity.ok(productoOptional.orElseThrow());
