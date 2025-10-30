@@ -43,7 +43,7 @@ public class OrdenController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(unOrden));
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<?> modificar(@PathVariable Long id, @RequestBody Orden unOrden){
         Optional<Orden> ordenOptional = service.findById(id);
         if (ordenOptional.isPresent()){

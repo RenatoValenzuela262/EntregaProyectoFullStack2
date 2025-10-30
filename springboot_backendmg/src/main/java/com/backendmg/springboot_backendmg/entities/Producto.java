@@ -17,8 +17,8 @@ public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String nombre, descripcion, categoria;
+    private Long idProducto;
+    private String nombre, descripcion, categoria, imagen;
     private Integer precio, stock;
 
     @CreationTimestamp
@@ -28,23 +28,24 @@ public class Producto {
     public Producto() {
     }
 
-    public Producto(Long id, String nombre, String descripcion, String categoria, Integer precio, Integer stock,
-            LocalDate fecha) {
-        this.id = id;
+    public Producto(Long idProducto, String nombre, String descripcion, String categoria, String imagen, Integer precio,
+            Integer stock, LocalDate fecha) {
+        this.idProducto = idProducto;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.categoria = categoria;
+        this.imagen = imagen;
         this.precio = precio;
         this.stock = stock;
         this.fecha = fecha;
     }
 
-    public Long getId() {
-        return id;
+    public Long getIdProducto() {
+        return idProducto;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdProducto(Long idProducto) {
+        this.idProducto = idProducto;
     }
 
     public String getNombre() {
@@ -71,6 +72,14 @@ public class Producto {
         this.categoria = categoria;
     }
 
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
     public Integer getPrecio() {
         return precio;
     }
@@ -94,5 +103,6 @@ public class Producto {
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
+
 
 }
