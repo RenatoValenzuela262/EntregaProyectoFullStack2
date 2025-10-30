@@ -3,6 +3,7 @@ package com.backendmg.springboot_backendmg.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/productos")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ProductoController {
 
     @Autowired
@@ -34,7 +36,7 @@ public class ProductoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> verUsuario(@PathVariable Long id) {
+    public ResponseEntity<?> verProducto(@PathVariable Long id) {
         Optional<Producto> productoOptional = service.findById(id);
         if (productoOptional.isPresent()){
             return ResponseEntity.ok(productoOptional.orElseThrow());
@@ -47,7 +49,7 @@ public class ProductoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(unProducto));
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<?> modifica(@PathVariable Long id, @RequestBody Producto unProducto){
         Optional<Producto> productoOptional = service.findById(id);
         if (productoOptional.isPresent()){
@@ -57,7 +59,7 @@ public class ProductoController {
             productoExistente.setPrecio(unProducto.getPrecio());
             productoExistente.setStock(unProducto.getStock());
             productoExistente.setCategoria(unProducto.getCategoria());
-            productoExistente.setFecha(unProducto.getFecha());
+            // productoExistente.setFecha(unProducto.getFecha());
             Producto productoModificado = service.save(productoExistente);
             return ResponseEntity.ok(productoModificado);
         }

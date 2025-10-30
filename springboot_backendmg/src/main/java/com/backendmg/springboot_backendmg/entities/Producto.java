@@ -8,6 +8,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+import jakarta.persistence.Column;
+
 @Entity
 @Table(name="producto")
 public class Producto {
@@ -17,6 +20,9 @@ public class Producto {
     private Long id;
     private String nombre, descripcion, categoria;
     private Integer precio, stock;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDate fecha;
     
     public Producto() {
@@ -88,10 +94,5 @@ public class Producto {
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
-
-    
-    
-
-    
 
 }

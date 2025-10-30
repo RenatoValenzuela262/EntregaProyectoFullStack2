@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import com.backendmg.springboot_backendmg.services.UsuarioService;
 
 @RestController
 @RequestMapping("api/usuarios")
+@CrossOrigin(origins = "http://localhost:5173")
 public class UsuarioController {
 
     @Autowired
@@ -44,18 +46,23 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(unUsuario));
     }
 
-    @PutMapping
-    public ResponseEntity<?> modificar(@PathVariable Long id, @RequestBody Usuario unUsuario){
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> modificar(@PathVariable Long id, @RequestBody Usuario unUsuario){ 
         Optional<Usuario> usuarioOptional = service.findById(id);
         if (usuarioOptional.isPresent()){
             Usuario usuarioExistente = usuarioOptional.get();
+            
             usuarioExistente.setNombreCompleto(unUsuario.getNombreCompleto());
-            usuarioExistente.setContrasenia(unUsuario.getContrasenia());
             usuarioExistente.setCorreo(unUsuario.getCorreo());
-            usuarioExistente.setTelefono(unUsuario.getTelefono());
             usuarioExistente.setRegion(unUsuario.getRegion());
             usuarioExistente.setComuna(unUsuario.getComuna());
+            usuarioExistente.setTelefono(unUsuario.getTelefono());
             usuarioExistente.setEstado(unUsuario.getEstado());
+            
+            if (unUsuario.getContrasenia() != null && !unUsuario.getContrasenia().isEmpty()) {
+                usuarioExistente.setContrasenia(unUsuario.getContrasenia());
+            }
             
             Usuario usuarioModificado = service.save(usuarioExistente);
             return ResponseEntity.ok(usuarioModificado);

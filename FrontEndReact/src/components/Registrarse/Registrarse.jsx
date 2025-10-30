@@ -58,6 +58,7 @@ function Registrarse() {
       comuna: userData.comuna,
       telefono: userData.telefono,
       estado: true,
+      tipo: "Cliente",
     };
 
     try {
