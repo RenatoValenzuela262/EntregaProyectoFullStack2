@@ -1,0 +1,19 @@
+.color-boton {
+  background-color: #d73385 !important;
+  color: white !important;
+}
+
+.boton-cancelar {
+  background-color: rgb(102, 102, 102) !important;
+  color: white !important;
+}
+
+.boton-modificar {
+  background-color: #962b60 !important;
+  color: white !important;
+}
+
+.boton-eliminar {
+  background-color: #81002b !important;
+  color: white !important;
+}

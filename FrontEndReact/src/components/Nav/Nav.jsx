@@ -1,5 +1,6 @@
 import "./Nav.css";
 import { Link } from "react-router-dom";
+import { useCart } from "../Productos/CartContext";
 
 export function LogoHome() {
   return (
@@ -12,9 +13,17 @@ export function LogoHome() {
 }
 
 function Nav() {
+  const { cartItems } = useCart();
+  const totalItems = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+
   return (
+    // Quitamos el position-relative, ya no es necesario
     <div className="cabezera">
-      <ul className="nav justify-content-center">
+      {/* Mantenemos align-items-center, es correcto */}
+      <ul className="nav justify-content-center align-items-center">
         <li className="nav-item">
           <Link className="nav-link links-navegacion" to="/Productos">
             Productos
@@ -40,6 +49,24 @@ function Nav() {
             Registrarse
           </Link>
         </li>
+
+        {/* --- CORRECCIÓN AQUÍ --- */}
+        <li className="nav-item">
+          {/* Quitamos el <div> que tenía 'position-absolute' */}
+          <Link
+            to="/Carrito"
+            className="nav-link links-navegacion position-relative"
+          >
+            <i className="bi bi-cart"></i>{" "}
+            {totalItems > 0 && (
+              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {totalItems}
+                <span className="visually-hidden">items en el carrito</span>
+              </span>
+            )}
+          </Link>
+        </li>
+        {/* --- FIN DE LA CORRECCIÓN --- */}
       </ul>
     </div>
   );

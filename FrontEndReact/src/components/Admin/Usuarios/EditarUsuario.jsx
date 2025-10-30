@@ -1,79 +1,93 @@
-import { useState } from "react";
-import validarCorreo from "../../../utils/Validaciones";
+import { useState, useEffect } from "react";
 import "./Usuarios.css";
 
-function CrearUsuario({ onUsuarioCreado, onCancelar }) {
+function EditarUsuario({ usuario, onUsuarioEditado, onCancelar }) {
   const [userData, setUserData] = useState({
     nombreCompleto: "",
     correo: "",
-    contrasenia: "",
-    confirmarContrasenia: "",
-    region: "metropolitana",
+    region: "",
     comuna: "",
     telefono: "",
     estado: true,
   });
 
+  const [contrasenia, setContrasenia] = useState("");
+  const [confirmarContrasenia, setConfirmarContrasenia] = useState("");
+
+  useEffect(() => {
+    if (usuario) {
+      setUserData({
+        nombreCompleto: usuario.nombreCompleto,
+        correo: usuario.correo,
+        region: usuario.region,
+        comuna: usuario.comuna,
+        telefono: usuario.telefono,
+        estado: usuario.estado,
+      });
+      setContrasenia("");
+      setConfirmarContrasenia("");
+    }
+  }, [usuario]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUserData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+
+    if (name === "estado") {
+      setUserData((prevData) => ({ ...prevData, estado: value === "true" }));
+    } else {
+      setUserData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (userData.nombreCompleto.length > 100) {
-      alert("El nombre no puede superar los 100 caracteres");
-      return;
-    }
-    if (userData.correo.length > 100) {
-      alert("El correo no puede superar los 100 caracteres");
-      return;
-    }
-    if (!validarCorreo(userData.correo)) {
-      alert("El correo debe ser @duocuc.cl, @profesor.duoc.cl o @gmail.com");
-      return;
-    }
-    if (userData.contrasenia !== userData.confirmarContrasenia) {
-      alert("Las contraseñas no coinciden");
-      return;
-    }
-    if (userData.contrasenia.length < 4 || userData.contrasenia.length > 10) {
-      alert("La contraseña debe tener entre 4 a 10 caracteres");
-      return;
-    }
     if (userData.comuna === "") {
       alert("Debes seleccionar una comuna");
       return;
     }
 
-    const usuario = {
+    const usuarioActualizado = {
       nombreCompleto: userData.nombreCompleto,
       correo: userData.correo,
-      contrasenia: userData.contrasenia,
       region: userData.region,
       comuna: userData.comuna,
       telefono: userData.telefono,
       estado: userData.estado,
     };
 
+    if (contrasenia !== "") {
+      if (contrasenia !== confirmarContrasenia) {
+        alert("Las nuevas contraseñas no coinciden");
+        return;
+      }
+      if (contrasenia.length < 4 || contrasenia.length > 10) {
+        alert("La nueva contraseña debe tener entre 4 a 10 caracteres");
+        return;
+      }
+      usuarioActualizado.contrasenia = contrasenia;
+    }
+
     try {
-      const response = await fetch("http://localhost:8080/api/usuarios", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(usuario),
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/usuarios/${usuario.id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(usuarioActualizado),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Error al crear el usuario");
+        throw new Error(errorData.message || "Error al actualizar el usuario");
       }
 
-      alert("¡Usuario creado con éxito!");
-      onUsuarioCreado();
+      alert("¡Usuario actualizado con éxito!");
+      onUsuarioEditado();
     } catch (error) {
       console.error(error);
       alert(error.message);
@@ -99,51 +113,55 @@ function CrearUsuario({ onUsuarioCreado, onCancelar }) {
 
       <div className="mb-3">
         <label htmlFor="email-input" className="form-label">
-          Email
+          Correo (no se puede modificar)
         </label>
         <input
           type="email"
           className="form-control"
           id="email-input"
-          required
+          readOnly
+          disabled
           name="correo"
           value={userData.correo}
-          onChange={handleChange}
         />
       </div>
 
+      <hr />
+      <p className="form-text">
+        Dejar en blanco para no modificar la contraseña.
+      </p>
+
       <div className="mb-3">
         <label htmlFor="password-input" className="form-label">
-          Contraseña
+          Nueva Contraseña
         </label>
         <input
           type="password"
           className="form-control"
           id="password-input"
-          required
           name="contrasenia"
-          value={userData.contrasenia}
-          onChange={handleChange}
+          value={contrasenia}
+          onChange={(e) => setContrasenia(e.target.value)}
         />
       </div>
 
       <div className="mb-3">
         <label htmlFor="Confpassword-input" className="form-label">
-          Confirmar Contraseña
+          Confirmar Nueva Contraseña
         </label>
         <input
           type="password"
           className="form-control"
           id="Confpassword-input"
-          required
           name="confirmarContrasenia"
-          value={userData.confirmarContrasenia}
-          onChange={handleChange}
+          value={confirmarContrasenia}
+          onChange={(e) => setConfirmarContrasenia(e.target.value)}
         />
       </div>
+      <hr />
 
       <div className="mb-3">
-        <label htmlFor="select-region">Selecciona tu región:</label>
+        <label htmlFor="select-region">Región:</label>
         <select
           id="select-region"
           className="form-select"
@@ -157,7 +175,7 @@ function CrearUsuario({ onUsuarioCreado, onCancelar }) {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="select-comunas">Selecciona tu comuna:</label>
+        <label htmlFor="select-comunas">Comuna:</label>
         <select
           id="select-comunas"
           className="form-select"
@@ -237,6 +255,21 @@ function CrearUsuario({ onUsuarioCreado, onCancelar }) {
         />
       </div>
 
+      <div className="mb-3">
+        <label htmlFor="select-estado">Estado:</label>
+        <select
+          id="select-estado"
+          className="form-select"
+          required
+          name="estado"
+          value={userData.estado}
+          onChange={handleChange}
+        >
+          <option value="true">Activo</option>
+          <option value="false">Inactivo</option>
+        </select>
+      </div>
+
       <div className="d-flex justify-content-end">
         <button
           type="button"
@@ -245,13 +278,12 @@ function CrearUsuario({ onUsuarioCreado, onCancelar }) {
         >
           Cancelar
         </button>
-
         <button type="submit" className="btn color-boton">
-          Crear Usuario
+          Guardar Cambios
         </button>
       </div>
     </form>
   );
 }
 
-export default CrearUsuario;
+export default EditarUsuario;
