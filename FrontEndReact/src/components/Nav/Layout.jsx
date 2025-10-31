@@ -1,16 +1,19 @@
-import { Outlet } from "react-router-dom";
 import Nav, { LogoHome, Footer } from "./Nav";
+import "./Nav.css";
 
-// Este componente envuelve toda la parte pública
-export function Layout() {
+function Layout({ children }) {
   return (
-    <>
-      <LogoHome />
-      <Nav />
-      <main className="container my-4">
-        <Outlet />
-      </main>
+    <div className="d-flex flex-column min-vh-100">
+      <header className="layout d-flex justify-content-center py-3">
+        <LogoHome />
+      </header>
+      <nav className="layout d-flex justify-content-center py-2">
+        <Nav />
+      </nav>
+      <main className="container flex-grow-1 my-4">{children}</main>
       <Footer />
-    </>
+    </div>
   );
 }
+
+export default Layout;

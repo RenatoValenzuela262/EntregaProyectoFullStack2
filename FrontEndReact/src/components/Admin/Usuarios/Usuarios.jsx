@@ -110,14 +110,14 @@ function Usuarios() {
                 <td>
                   <div className="btn-group w-100" role="group">
                     <button
-                      className="btn btn-warning btn-sm"
+                      className="btn boton-modificar btn-sm"
                       onClick={() => handleAbrirEditModal(usuario)}
                       disabled={esAdmin}
                     >
                       Modificar
                     </button>
                     <button
-                      className="btn btn-danger btn-sm"
+                      className="btn boton-eliminar btn-sm"
                       onClick={() => handleEliminar(usuario.idUsuario)}
                       disabled={esAdmin}
                     >
