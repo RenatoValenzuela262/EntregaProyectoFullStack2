@@ -1,17 +1,18 @@
 import { useState } from "react";
-import { useAuth } from "./AuthContext";
+import { useNavigate } from "react-router-dom";
 import "./IniciarSesion.css";
+// CAMBIO: La ruta ahora es local
+import { useAuth } from "./AuthContext";
 
 function IniciarSesion() {
-  const { login } = useAuth();
-
-  // Usamos tu lógica preferida de un solo estado
   const [loginData, setLoginData] = useState({
     correo: "",
     contrasenia: "",
   });
 
-  // Y tu manejador de cambios
+  const navigate = useNavigate();
+  const { login } = useAuth(); // Usamos el 'login' del contexto
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLoginData((prevData) => ({
@@ -20,9 +21,13 @@ function IniciarSesion() {
     }));
   };
 
-  // El handleSubmit usa nuestra lógica de 'AuthContext'
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const loginRequest = {
+      correo: loginData.correo,
+      contrasenia: loginData.contrasenia,
+    };
 
     try {
       const response = await fetch("http://localhost:8080/api/usuarios/login", {
@@ -30,26 +35,27 @@ function IniciarSesion() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          correo: loginData.correo,
-          contrasenia: loginData.contrasenia,
-        }),
+        body: JSON.stringify(loginRequest),
       });
 
-      if (response.ok) {
-        const userData = await response.json();
-        // Llamamos a la función 'login' del contexto
-        login(userData);
-      } else {
-        const errorMessage = await response.text();
-        alert(`Error al iniciar sesión: ${errorMessage}`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || "Correo o contraseña incorrectos");
       }
+
+      const usuarioLogueado = await response.json();
+
+      // Llamamos a la función login del contexto
+      login(usuarioLogueado);
+
+      alert("¡Inicio de sesión exitoso!");
+      navigate("/Home"); // Redirige al Home
     } catch (error) {
-      alert(`Error al conectar con el servidor: ${error.message}`);
+      console.error("Error al iniciar sesión:", error);
+      alert("Error al iniciar sesión: " + error.message);
     }
   };
 
-  // Aquí usamos tu diseño preferido (sin 'card')
   return (
     <>
       <div className="container">

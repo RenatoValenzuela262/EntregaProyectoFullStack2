@@ -18,46 +18,38 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  const login = async (correo, contrasenia) => {
-    const loginRequest = { correo, contrasenia };
+  const login = (userData) => {
+    localStorage.setItem("currentUser", JSON.stringify(userData));
+    setCurrentUser(userData);
 
-    const response = await fetch("http://localhost:8080/api/usuarios/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(loginRequest),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText || "Credenciales inválidas");
-    }
-
-    const user = await response.json();
-    localStorage.setItem("currentUser", JSON.stringify(user));
-    setCurrentUser(user);
-
-    if (user.tipo === "ADMIN") {
-      navigate("/admin/usuarios"); // Redirige al admin a la vista de usuarios
+    // --- CORRECCIÓN AQUÍ ---
+    // Redirigimos si es ADMIN o ADMIN+
+    if (userData.tipo === "ADMIN" || userData.tipo === "ADMIN+") {
+      navigate("/admin/usuarios"); // O la ruta de admin que prefieras
     } else {
-      navigate("/Productos"); // Redirige al cliente a la tienda
+      navigate("/Home");
     }
   };
 
   const logout = () => {
-    setCurrentUser(null);
     localStorage.removeItem("currentUser");
+    setCurrentUser(null);
     navigate("/IniciarSesion");
   };
 
-  // --- NUEVO ---
-  // Creamos un valor 'isAdmin' para que sea fácil de consultar
-  const isAdmin = currentUser?.tipo === "ADMIN";
+  // --- CORRECCIÓN AQUÍ ---
+  // Hacemos que 'isAdmin' sea verdad para ambos roles de admin
+  const isAdmin =
+    currentUser?.tipo === "ADMIN" || currentUser?.tipo === "ADMIN+";
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
-    <AuthContext.Provider
-      value={{ currentUser, login, logout, isLoading, isAdmin }}
-    >
-      {!isLoading && children}
+    // Pasamos el 'isAdmin' corregido que tu Nav.jsx necesita
+    <AuthContext.Provider value={{ currentUser, login, logout, isAdmin }}>
+      {children}
     </AuthContext.Provider>
   );
 };

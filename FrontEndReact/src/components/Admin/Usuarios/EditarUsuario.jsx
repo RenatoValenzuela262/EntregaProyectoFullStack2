@@ -9,6 +9,7 @@ function EditarUsuario({ usuario, onUsuarioEditado, onCancelar }) {
     comuna: "",
     telefono: "",
     estado: true,
+    tipo: "CLIENTE", // Añadido el campo 'tipo'
   });
 
   const [contrasenia, setContrasenia] = useState("");
@@ -23,6 +24,7 @@ function EditarUsuario({ usuario, onUsuarioEditado, onCancelar }) {
         comuna: usuario.comuna,
         telefono: usuario.telefono,
         estado: usuario.estado,
+        tipo: usuario.tipo, // Añadido el campo 'tipo'
       });
       setContrasenia("");
       setConfirmarContrasenia("");
@@ -57,6 +59,7 @@ function EditarUsuario({ usuario, onUsuarioEditado, onCancelar }) {
       comuna: userData.comuna,
       telefono: userData.telefono,
       estado: userData.estado,
+      tipo: userData.tipo, // Añadido el campo 'tipo'
     };
 
     if (contrasenia !== "") {
@@ -73,7 +76,7 @@ function EditarUsuario({ usuario, onUsuarioEditado, onCancelar }) {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/usuarios/${usuario.id}`,
+        `http://localhost:8080/api/usuarios/${usuario.idUsuario}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -161,7 +164,9 @@ function EditarUsuario({ usuario, onUsuarioEditado, onCancelar }) {
       <hr />
 
       <div className="mb-3">
-        <label htmlFor="select-region">Región:</label>
+        <label htmlFor="select-region" className="form-label">
+          Región:
+        </label>
         <select
           id="select-region"
           className="form-select"
@@ -175,7 +180,9 @@ function EditarUsuario({ usuario, onUsuarioEditado, onCancelar }) {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="select-comunas">Comuna:</label>
+        <label htmlFor="select-comunas" className="form-label">
+          Comuna:
+        </label>
         <select
           id="select-comunas"
           className="form-select"
@@ -255,8 +262,28 @@ function EditarUsuario({ usuario, onUsuarioEditado, onCancelar }) {
         />
       </div>
 
+      {/* --- CAMPO AÑADIDO: TIPO --- */}
       <div className="mb-3">
-        <label htmlFor="select-estado">Estado:</label>
+        <label htmlFor="select-tipo" className="form-label">
+          Tipo de Usuario:
+        </label>
+        <select
+          id="select-tipo"
+          className="form-select"
+          required
+          name="tipo"
+          value={userData.tipo}
+          onChange={handleChange}
+        >
+          <option value="CLIENTE">Cliente</option>
+          <option value="ADMIN">Admin</option>
+        </select>
+      </div>
+
+      <div className="mb-3">
+        <label htmlFor="select-estado" className="form-label">
+          Estado:
+        </label>
         <select
           id="select-estado"
           className="form-select"

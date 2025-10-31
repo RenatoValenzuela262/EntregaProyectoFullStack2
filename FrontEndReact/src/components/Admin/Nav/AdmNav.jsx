@@ -8,9 +8,11 @@ export function LogoHomeAdm() {
         <Link className="logoPosition" to="/Home">
           <img className="logoHome" src="/Logo3.png" alt="MundoGolosin Logo" />
         </Link>
-        <p className="logoText mt-2">
+        {/* --- CORRECCIÓN AQUÍ --- */}
+        {/* Cambiamos <p> por <div> para que pueda contener un <h5> */}
+        <div className="logoText mt-2">
           <h5>MundoGolosín</h5>
-        </p>
+        </div>
       </div>
     </>
   );
