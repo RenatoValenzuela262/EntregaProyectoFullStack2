@@ -8,17 +8,35 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
   const addToCart = (producto) => {
+    // Validar que el producto tenga un identificador único
+    if (!producto.id && !producto.nombre) {
+      console.error("Producto sin identificador único:", producto);
+      return;
+    }
+
+    // Usar id si existe, sino usar nombre como fallback
+    const identifier = producto.id || producto.nombre;
+
     setCartItems((prevItems) => {
-      const itemExistente = prevItems.find((item) => item.id === producto.id);
+      const itemExistente = prevItems.find(
+        (item) => item.id === identifier || item.nombre === identifier
+      );
 
       if (itemExistente) {
         return prevItems.map((item) =>
-          item.id === producto.id
+          item.id === identifier || item.nombre === identifier
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       } else {
-        return [...prevItems, { ...producto, quantity: 1 }];
+        return [
+          ...prevItems,
+          {
+            ...producto,
+            id: producto.id || identifier, // Asegurar que tenga id
+            quantity: 1,
+          },
+        ];
       }
     });
   };
@@ -27,7 +45,7 @@ export const CartProvider = ({ children }) => {
     setCartItems((prevItems) => {
       const itemExistente = prevItems.find((item) => item.id === id);
 
-      if (itemExistente.quantity === 1) {
+      if (itemExistente && itemExistente.quantity === 1) {
         return prevItems.filter((item) => item.id !== id);
       } else {
         return prevItems.map((item) =>

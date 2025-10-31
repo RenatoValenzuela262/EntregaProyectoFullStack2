@@ -2,17 +2,12 @@ import { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import CrearUsuario from "./CrearUsuario";
 import EditarUsuario from "./EditarUsuario";
-// --- 1. IMPORTAMOS useAuth PARA SABER QUIÉN ESTÁ LOGUEADO ---
-import { useAuth } from "../../IniciarSesion/AuthContext"; // (Ajusta la ruta si es necesario)
 
 function Usuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
-
-  // --- 2. OBTENEMOS EL USUARIO LOGUEADO ---
-  const { currentUser } = useAuth();
 
   const fetchUsuarios = async () => {
     try {
@@ -102,23 +97,8 @@ function Usuarios() {
         </thead>
         <tbody>
           {usuarios.map((usuario) => {
-            // --- 3. LÓGICA DE PROTECCIÓN MEJORADA ---
-            let isDisabled = false;
-
-            // Regla 1: Nadie (ni él mismo) puede modificar/eliminar al Super Admin
-            if (usuario.tipo === "ADMIN+") {
-              isDisabled = true;
-            }
-            // Regla 2: Un ADMIN normal no puede tocar a OTRO ADMIN
-            // (Usamos currentUser?.tipo para evitar errores si el usuario no ha cargado)
-            else if (
-              currentUser?.tipo === "ADMIN" &&
-              usuario.tipo === "ADMIN"
-            ) {
-              isDisabled = true;
-            }
-            // (Si el currentUser es 'ADMIN+', la Regla 2 no se cumple,
-            // por lo que SÍ puede modificar a los 'ADMIN' normales)
+            // --- LÓGICA DE PROTECCIÓN ---
+            const esAdmin = usuario.tipo === "ADMIN";
 
             return (
               <tr key={usuario.idUsuario}>
@@ -132,14 +112,14 @@ function Usuarios() {
                     <button
                       className="btn boton-modificar btn-sm"
                       onClick={() => handleAbrirEditModal(usuario)}
-                      disabled={isDisabled} // <-- Lógica de 'disabled' actualizada
+                      disabled={esAdmin}
                     >
                       Modificar
                     </button>
                     <button
                       className="btn boton-eliminar btn-sm"
                       onClick={() => handleEliminar(usuario.idUsuario)}
-                      disabled={isDisabled} // <-- Lógica de 'disabled' actualizada
+                      disabled={esAdmin}
                     >
                       Eliminar
                     </button>

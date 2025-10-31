@@ -62,30 +62,23 @@ function Registrarse() {
     };
 
     try {
-      // 1. Llama a 'fetch' con la URL y las opciones
       const response = await fetch("http://localhost:8080/api/usuarios", {
-        method: "POST", // Tienes que especificar el método
+        method: "POST",
         headers: {
-          // Tienes que decirle a Spring Boot que estás enviando JSON
           "Content-Type": "application/json",
         },
-        // Tienes que convertir tu objeto a un string JSON
         body: JSON.stringify(usuario),
       });
 
-      // 2. 'fetch' no da error por 404 o 500, debes comprobarlo tú
       if (!response.ok) {
-        // Intentamos leer el cuerpo del error que envía Spring Boot
         const errorData = await response.json();
         throw new Error(errorData.message || "Error del servidor");
       }
 
-      // 3. Si todo salió bien (response.ok es true)
-      const data = await response.json(); // Obtienes la respuesta (ej: "Usuario registrado")
+      const data = await response.json();
       console.log("Respuesta de Spring Boot:", data);
       alert("¡Usuario registrado con éxito!");
     } catch (error) {
-      // Este 'catch' atrapa errores de red o el error que "lanzamos" arriba
       console.error("Error al registrar:", error);
       alert("Error al registrar: " + error.message);
     }

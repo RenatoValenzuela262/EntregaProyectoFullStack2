@@ -1,7 +1,9 @@
 import Nav, { LogoHome, Footer } from "./Nav";
 import "./Nav.css";
+// Nota: NO se importa { Outlet }
 
 function Layout({ children }) {
+  // Usa la prop {children}
   return (
     <div className="d-flex flex-column min-vh-100">
       <header className="layout d-flex justify-content-center py-3">
@@ -10,7 +12,8 @@ function Layout({ children }) {
       <nav className="layout d-flex justify-content-center py-2">
         <Nav />
       </nav>
-      <main className="container flex-grow-1 my-4">{children}</main>
+      <main className="container flex-grow-1 my-4">{children}</main>{" "}
+      {/* Usa {children} */}
       <Footer />
     </div>
   );

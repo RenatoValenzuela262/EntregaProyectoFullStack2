@@ -121,5 +121,4 @@ export function Footer() {
   );
 }
 
-// Export default al final, como prefieres
 export default Nav;

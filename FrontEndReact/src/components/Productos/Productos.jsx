@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-// CAMBIO: La ruta ahora es local
 import { useCart } from "./CartContext";
 import "./Productos.css";
 
