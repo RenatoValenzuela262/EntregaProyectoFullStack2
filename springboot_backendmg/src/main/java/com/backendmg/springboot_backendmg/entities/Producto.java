@@ -2,107 +2,114 @@ package com.backendmg.springboot_backendmg.entities;
 
 import java.time.LocalDate;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import org.hibernate.annotations.CreationTimestamp;
-import jakarta.persistence.Column;
-
 @Entity
-@Table(name="producto")
+@Table(name = "producto")
 public class Producto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idProducto;
-    private String nombre, descripcion, categoria, imagen;
-    private Integer precio, stock;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long idProducto;
 
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private LocalDate fecha;
-    
-    public Producto() {
-    }
+  private String nombre, descripcion, categoria, imagen;
+  private Integer precio, stock;
 
-    public Producto(Long idProducto, String nombre, String descripcion, String categoria, String imagen, Integer precio,
-            Integer stock, LocalDate fecha) {
-        this.idProducto = idProducto;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.categoria = categoria;
-        this.imagen = imagen;
-        this.precio = precio;
-        this.stock = stock;
-        this.fecha = fecha;
-    }
+  @CreationTimestamp
+  @Column(nullable = false, updatable = false)
+  private LocalDate fecha;
 
-    public Long getIdProducto() {
-        return idProducto;
-    }
+  public Producto() {}
 
-    public void setIdProducto(Long idProducto) {
-        this.idProducto = idProducto;
-    }
+  public Producto(
+    Long idProducto,
+    String nombre,
+    String descripcion,
+    String categoria,
+    String imagen,
+    Integer precio,
+    Integer stock,
+    LocalDate fecha
+  ) {
+    this.idProducto = idProducto;
+    this.nombre = nombre;
+    this.descripcion = descripcion;
+    this.categoria = categoria;
+    this.imagen = imagen;
+    this.precio = precio;
+    this.stock = stock;
+    this.fecha = fecha;
+  }
 
-    public String getNombre() {
-        return nombre;
-    }
+  public Long getIdProducto() {
+    return idProducto;
+  }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+  public void setIdProducto(Long idProducto) {
+    this.idProducto = idProducto;
+  }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
+  public String getNombre() {
+    return nombre;
+  }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+  public void setNombre(String nombre) {
+    this.nombre = nombre;
+  }
 
-    public String getCategoria() {
-        return categoria;
-    }
+  public String getDescripcion() {
+    return descripcion;
+  }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
+  public void setDescripcion(String descripcion) {
+    this.descripcion = descripcion;
+  }
 
-    public String getImagen() {
-        return imagen;
-    }
+  public String getCategoria() {
+    return categoria;
+  }
 
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
-    }
+  public void setCategoria(String categoria) {
+    this.categoria = categoria;
+  }
 
-    public Integer getPrecio() {
-        return precio;
-    }
+  public String getImagen() {
+    return imagen;
+  }
 
-    public void setPrecio(Integer precio) {
-        this.precio = precio;
-    }
+  public void setImagen(String imagen) {
+    this.imagen = imagen;
+  }
 
-    public Integer getStock() {
-        return stock;
-    }
+  public Integer getPrecio() {
+    return precio;
+  }
 
-    public void setStock(Integer stock) {
-        this.stock = stock;
-    }
+  public void setPrecio(Integer precio) {
+    this.precio = precio;
+  }
 
-    public LocalDate getFecha() {
-        return fecha;
-    }
+  public Integer getStock() {
+    return stock;
+  }
 
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
+  public void setStock(Integer stock) {
+    this.stock = stock;
+  }
 
+  public LocalDate getFecha() {
+    return fecha;
+  }
 
+  public void setFecha(LocalDate fecha) {
+    this.fecha = fecha;
+  }
 }

@@ -1,34 +1,28 @@
-.barra-lateral {
-  background-color: #ffe0f0;
-  align-items: center;
-}
+/* Estilos básicos para el layout del admin */
 
-.logoPosition {
+.adm-layout-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  min-height: 100vh;
 }
 
-.logoPosition .logoHome {
-  width: 80px;
+.adm-sidebar {
+  width: 280px;
+  background-color: #343a40; /* Un color oscuro para el admin nav */
+  color: white;
+  padding: 20px;
 }
 
-.logoText {
-  margin: 20px 30px 20px;
-  color: #d73385;
-  font-size: 20px;
-  font-weight: 100 bold;
+.adm-sidebar .nav-link {
+  color: #c2c7d0;
 }
 
-.vista-cliente {
-  background-color: #ffffff;
+.adm-sidebar .nav-link:hover {
+  color: #ffffff;
+  background-color: #495057;
 }
 
-.sidebar .nav-link {
-  color: rgb(42, 42, 42);
-}
-
-.sidebar .nav-link:hover {
-  color: #d73385;
+.adm-content {
+  flex-grow: 1;
+  padding: 30px;
+  background-color: #f4f6f9; /* Un fondo gris claro para el contenido */
 }

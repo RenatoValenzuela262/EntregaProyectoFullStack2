@@ -1,6 +1,7 @@
 import "./Nav.css";
 import { Link } from "react-router-dom";
-import { useCart } from "../Productos/CartContext";
+import { useCart } from "../../components/Productos/CartContext";
+import { useAuth } from "../../components/IniciarSesion/AuthContext";
 
 export function LogoHome() {
   return (
@@ -14,6 +15,8 @@ export function LogoHome() {
 
 function Nav() {
   const { cartItems } = useCart();
+  const { currentUser, logout, isAdmin } = useAuth();
+
   const totalItems = cartItems.reduce(
     (total, item) => total + item.quantity,
     0
@@ -37,16 +40,47 @@ function Nav() {
             Sobre Nosotros
           </Link>
         </li>
-        <li className="nav-item">
-          <Link className="nav-link links-navegacion" to="/IniciarSesion">
-            Iniciar Sesion
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link links-navegacion" to="/Registrarse">
-            Registrarse
-          </Link>
-        </li>
+
+        {/* --- Lógica de Admin --- */}
+        {isAdmin && (
+          <>
+            <li className="nav-item">
+              <Link className="nav-link links-navegacion" to="/admin/productos">
+                Adm. Productos
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link links-navegacion" to="/admin/usuarios">
+                Adm. Usuarios
+              </Link>
+            </li>
+          </>
+        )}
+
+        {/* --- Lógica de Login/Logout --- */}
+        {currentUser ? (
+          <li className="nav-item">
+            <button
+              className="nav-link links-navegacion btn btn-link"
+              onClick={logout}
+            >
+              Cerrar Sesión
+            </button>
+          </li>
+        ) : (
+          <>
+            <li className="nav-item">
+              <Link className="nav-link links-navegacion" to="/IniciarSesion">
+                Iniciar Sesion
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link links-navegacion" to="/Registrarse">
+                Registrarse
+              </Link>
+            </li>
+          </>
+        )}
 
         <li className="nav-item">
           <Link

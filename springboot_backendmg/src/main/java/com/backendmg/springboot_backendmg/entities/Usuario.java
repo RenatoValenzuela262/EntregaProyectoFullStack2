@@ -1,5 +1,6 @@
 package com.backendmg.springboot_backendmg.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,8 +13,14 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Column(name = "id")
     private Long idUsuario;
-    private String nombreCompleto, correo, contrasenia, region, comuna, tipo;
+
+    @Column(name = "nombre_completo")
+    private String nombreCompleto;
+
+    private String correo, contrasenia, region, comuna, tipo;
     private Integer telefono;
     private Boolean estado;
 

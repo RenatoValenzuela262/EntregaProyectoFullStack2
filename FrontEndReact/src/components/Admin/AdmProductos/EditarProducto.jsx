@@ -8,6 +8,7 @@ function EditarProducto({ producto, onProductoEditado, onCancelar }) {
     descripcion: "",
     precio: "",
     stock: "",
+    imagen: "",
   });
 
   useEffect(() => {
@@ -18,6 +19,7 @@ function EditarProducto({ producto, onProductoEditado, onCancelar }) {
         descripcion: producto.descripcion,
         precio: producto.precio,
         stock: producto.stock,
+        imagen: producto.imagen,
       });
     }
   }, [producto]);
@@ -34,8 +36,10 @@ function EditarProducto({ producto, onProductoEditado, onCancelar }) {
     e.preventDefault();
 
     try {
+      // --- CORRECCIÓN DEFINITIVA AQUÍ ---
+      // El campo en tu JSON se llama 'idProducto', no 'id'
       const response = await fetch(
-        `http://localhost:8080/api/productos/${producto.id}`,
+        `http://localhost:8080/api/productos/${producto.idProducto}`,
         {
           method: "PUT",
           headers: {
@@ -46,8 +50,8 @@ function EditarProducto({ producto, onProductoEditado, onCancelar }) {
       );
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || "Error al actualizar producto");
+        const errorText = await response.text();
+        throw new Error(errorText || "Error al actualizar producto");
       }
 
       alert("¡Producto actualizado con éxito!");
@@ -61,6 +65,8 @@ function EditarProducto({ producto, onProductoEditado, onCancelar }) {
   return (
     <>
       <form onSubmit={handleSubmit}>
+        {/* ... (el resto de tu formulario) ... */}
+
         <div className="mb-3">
           <label htmlFor="nombre-input" className="form-label">
             Nombre Producto
@@ -104,6 +110,22 @@ function EditarProducto({ producto, onProductoEditado, onCancelar }) {
             value={productoData.descripcion}
             onChange={handleChange}
             size={3}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="imagen-input" className="form-label">
+            URL de la Imagen (Pinterest, etc.)
+          </label>
+          <input
+            type="url"
+            className="form-control"
+            id="imagen-input"
+            required
+            name="imagen"
+            value={productoData.imagen}
+            onChange={handleChange}
+            placeholder="https://i.pinimg.com/..."
           />
         </div>
 

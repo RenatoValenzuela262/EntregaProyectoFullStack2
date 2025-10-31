@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 import "./IniciarSesion.css";
 
 function IniciarSesion() {
-  // 1. Estado actualizado
+  const { login } = useAuth();
+
+  // Usamos tu lógica preferida de un solo estado
   const [loginData, setLoginData] = useState({
     correo: "",
     contrasenia: "",
   });
 
-  const navigate = useNavigate();
-
+  // Y tu manejador de cambios
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLoginData((prevData) => ({
@@ -19,41 +20,36 @@ function IniciarSesion() {
     }));
   };
 
+  // El handleSubmit usa nuestra lógica de 'AuthContext'
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 2. Objeto actualizado para enviar
-    const loginRequest = {
-      correo: loginData.correo,
-      contrasenia: loginData.contrasenia,
-    };
-
     try {
-      const response = await fetch("http://localhost:8080/api/auth/login", {
-        // (Revisa tu URL)
+      const response = await fetch("http://localhost:8080/api/usuarios/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(loginRequest),
+        body: JSON.stringify({
+          correo: loginData.correo,
+          contrasenia: loginData.contrasenia,
+        }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Correo o contraseña incorrectos");
+      if (response.ok) {
+        const userData = await response.json();
+        // Llamamos a la función 'login' del contexto
+        login(userData);
+      } else {
+        const errorMessage = await response.text();
+        alert(`Error al iniciar sesión: ${errorMessage}`);
       }
-
-      const data = await response.json();
-      localStorage.setItem("token", data.token);
-
-      alert("¡Inicio de sesión exitoso!");
-      navigate("/");
     } catch (error) {
-      console.error("Error al iniciar sesión:", error);
-      alert("Error: " + error.message);
+      alert(`Error al conectar con el servidor: ${error.message}`);
     }
   };
 
+  // Aquí usamos tu diseño preferido (sin 'card')
   return (
     <>
       <div className="container">
@@ -68,8 +64,8 @@ function IniciarSesion() {
                 className="form-control"
                 id="email-input"
                 required
-                name="correo" // <-- 3. Actualizado
-                value={loginData.correo} // <-- 4. Actualizado
+                name="correo"
+                value={loginData.correo}
                 onChange={handleChange}
               />
             </div>
@@ -85,8 +81,8 @@ function IniciarSesion() {
                 className="form-control"
                 id="password-input"
                 required
-                name="contrasenia" // <-- 3. Actualizado
-                value={loginData.contrasenia} // <-- 4. Actualizado
+                name="contrasenia"
+                value={loginData.contrasenia}
                 onChange={handleChange}
               />
             </div>

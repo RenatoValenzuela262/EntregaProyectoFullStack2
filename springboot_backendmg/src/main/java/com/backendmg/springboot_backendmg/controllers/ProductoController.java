@@ -3,7 +3,6 @@ package com.backendmg.springboot_backendmg.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,62 +18,71 @@ import com.backendmg.springboot_backendmg.entities.Producto;
 import java.util.List;
 import java.util.Optional;
 
-
-
-
 @RestController
 @RequestMapping("api/productos")
-@CrossOrigin(origins = "http://localhost:5173")
+// Quitamos @CrossOrigin porque ahora usamos SecurityConfig (el filtro global)
 public class ProductoController {
 
     @Autowired
     private ProductoService service;
 
     @GetMapping
-    public List<Producto> List(){
+    public List<Producto> List() {
         return service.findByAll();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> verUsuario(@PathVariable Long id) {
-        Optional<Producto> productoOptional = service.findById(id);
-        if (productoOptional.isPresent()){
+    // CORRECCIÓN 1: La ruta usa {idProducto} y el parámetro es Long idProducto
+    @GetMapping("/{idProducto}")
+    public ResponseEntity<?> verUsuario(@PathVariable Long idProducto) {
+        Optional<Producto> productoOptional = service.findById(idProducto);
+        if (productoOptional.isPresent()) {
             return ResponseEntity.ok(productoOptional.orElseThrow());
         }
         return ResponseEntity.notFound().build();
     }
-    
+
     @PostMapping
-    public ResponseEntity<Producto> crear(@RequestBody Producto unProducto){
+    public ResponseEntity<Producto> crear(@RequestBody Producto unProducto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(unProducto));
     }
 
-    @PutMapping
-    public ResponseEntity<?> modifica(@PathVariable Long id, @RequestBody Producto unProducto){
-        Optional<Producto> productoOptional = service.findById(id);
-        if (productoOptional.isPresent()){
+    // CORRECCIÓN 1: La ruta usa {idProducto} y el parámetro es Long idProducto
+    @PutMapping("/{idProducto}")
+    public ResponseEntity<?> modifica(@PathVariable Long idProducto, @RequestBody Producto unProducto) {
+        Optional<Producto> productoOptional = service.findById(idProducto);
+        
+        if (productoOptional.isPresent()) {
             Producto productoExistente = productoOptional.get();
+            
+            // Seteamos todos los campos que vienen del frontend
             productoExistente.setNombre(unProducto.getNombre());
             productoExistente.setDescripcion(unProducto.getDescripcion());
             productoExistente.setPrecio(unProducto.getPrecio());
             productoExistente.setStock(unProducto.getStock());
             productoExistente.setCategoria(unProducto.getCategoria());
-            productoExistente.setFecha(unProducto.getFecha());
+            
+            // CORRECCIÓN 2: Añadimos la línea para guardar la imagen
+            productoExistente.setImagen(unProducto.getImagen());
+            
+            // CORRECCIÓN 3: Quitamos la línea que actualiza la fecha
+            // productoExistente.setFecha(unProducto.getFecha()); 
+            
             Producto productoModificado = service.save(productoExistente);
             return ResponseEntity.ok(productoModificado);
         }
         return ResponseEntity.notFound().build();
     }
 
+    // CORRECCIÓN 1: La ruta usa {idProducto} y el parámetro es Long idProducto
     @DeleteMapping("/{idProducto}")
-    public ResponseEntity<?> eliminar(@PathVariable Long idProducto){
+    public ResponseEntity<?> eliminar(@PathVariable Long idProducto) {
         Producto unProducto = new Producto();
         unProducto.setIdProducto(idProducto);
         Optional<Producto> productoOptional = service.delete(unProducto);
-        if(productoOptional.isPresent()){
+        if (productoOptional.isPresent()) {
             return ResponseEntity.ok(productoOptional.orElseThrow());
         }
         return ResponseEntity.notFound().build();
     }
-
 }
+

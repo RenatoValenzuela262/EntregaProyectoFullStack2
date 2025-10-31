@@ -1,44 +1,53 @@
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../IniciarSesion/AuthContext";
 import "./AdmNav.css";
-import { Link } from "react-router-dom";
 
 export function LogoHomeAdm() {
   return (
-    <>
-      <div className="">
-        <Link className="logoPosition" to="/Home">
-          <img className="logoHome" src="/Logo3.png" alt="MundoGolosin Logo" />
-        </Link>
-        <p className="logoText mt-2">
-          <h5>MundoGolosín</h5>
-        </p>
-      </div>
-    </>
+    <div className="cabezera justify-content-center">
+      <Link to="/Home">
+        <img className="logoHome" src="/Logo3.png" alt="MundoGolosin Logo" />
+      </Link>
+    </div>
   );
 }
 
 function AdmNav() {
+  const { currentUser, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/IniciarSesion");
+  };
+
   return (
-    <>
-      <aside className="sidebar">
-        <ul className="nav flex-column">
-          <li className="nav-item texto-nav">
-            <Link className="nav-link" to="/Ordenes">
-              Ordenes
-            </Link>
-          </li>
-          <li className="nav-item texto-nav">
-            <Link className="nav-link" to="/AdmProductos">
-              Productos
-            </Link>
-          </li>
-          <li className="nav-item texto-nav">
-            <Link className="nav-link" to="/Usuarios">
-              Usuarios
-            </Link>
-          </li>
-        </ul>
-      </aside>
-    </>
+    <nav className="adm-sidebar">
+      <h4>Panel de Admin</h4>
+      <hr />
+      <p>
+        Bienvenido,
+        <br />
+        <strong>{currentUser?.nombreCompleto}</strong>
+      </p>
+      <hr />
+      <ul className="nav flex-column">
+        <li className="nav-item">
+          <Link className="nav-link" to="/admin/productos">
+            Adm. Productos
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link" to="/admin/usuarios">
+            Adm. Usuarios
+          </Link>
+        </li>
+      </ul>
+      <hr />
+      <button className="btn btn-danger w-100" onClick={handleLogout}>
+        Cerrar Sesión
+      </button>
+    </nav>
   );
 }
 

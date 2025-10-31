@@ -5,9 +5,7 @@ import EditarProducto from "./EditarProducto";
 
 function AdmProductos() {
   const [productos, setProductos] = useState([]);
-
   const [showModal, setShowModal] = useState(false);
-
   const [showEditModal, setShowEditModal] = useState(false);
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
 
@@ -59,6 +57,7 @@ function AdmProductos() {
     }
 
     try {
+      // Usamos la URL correcta (idProducto)
       const response = await fetch(
         `http://localhost:8080/api/productos/${id}`,
         {
@@ -105,8 +104,9 @@ function AdmProductos() {
           </thead>
           <tbody>
             {productos.map((producto) => (
-              <tr key={producto.id}>
-                <td>{producto.id}</td>
+              // --- CAMBIO AQUÍ ---
+              <tr key={producto.idProducto}>
+                <td>{producto.idProducto}</td>
                 <td>{producto.nombre}</td>
                 <td>{producto.categoria}</td>
                 <td>{producto.descripcion}</td>
@@ -123,7 +123,8 @@ function AdmProductos() {
                     </button>
                     <button
                       className="btn boton-eliminar btn-sm me-2"
-                      onClick={() => handleEliminar(producto.id)}
+                      // --- Y CAMBIO AQUÍ ---
+                      onClick={() => handleEliminar(producto.idProducto)}
                     >
                       Eliminar
                     </button>
@@ -133,6 +134,8 @@ function AdmProductos() {
             ))}
           </tbody>
         </table>
+
+        {/* ... (tus modales se quedan igual) ... */}
 
         <Modal show={showModal} onHide={handleCerrarModal}>
           <Modal.Header closeButton>

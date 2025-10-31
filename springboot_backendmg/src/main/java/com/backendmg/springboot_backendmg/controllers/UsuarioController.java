@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,9 +19,9 @@ import com.backendmg.springboot_backendmg.dto.LoginRequest;
 import com.backendmg.springboot_backendmg.entities.Usuario;
 import com.backendmg.springboot_backendmg.services.UsuarioService;
 
+
 @RestController
 @RequestMapping("api/usuarios")
-@CrossOrigin(origins = "http://localhost:5173")
 public class UsuarioController {
 
     
@@ -51,6 +50,54 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<Usuario> crear(@RequestBody Usuario unUsuario){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(unUsuario));
+    }
+
+    // @PutMapping("/{id}")
+    // public ResponseEntity<?> modificar(@PathVariable Long id, @RequestBody Usuario unUsuario){
+    //     Optional<Usuario> usuarioOptional = service.findById(id);
+    //     if (usuarioOptional.isPresent()){
+    //         Usuario usuarioExistente = usuarioOptional.get();
+    //         usuarioExistente.setNombreCompleto(unUsuario.getNombreCompleto());
+    //         usuarioExistente.setContrasenia(unUsuario.getContrasenia());
+    //         usuarioExistente.setCorreo(unUsuario.getCorreo());
+    //         usuarioExistente.setTelefono(unUsuario.getTelefono());
+    //         usuarioExistente.setRegion(unUsuario.getRegion());
+    //         usuarioExistente.setComuna(unUsuario.getComuna());
+    //         usuarioExistente.setEstado(unUsuario.getEstado());
+    //         usuarioExistente.setTipo(unUsuario.getTipo());
+            
+    //         Usuario usuarioModificado = service.save(usuarioExistente);
+    //         return ResponseEntity.ok(usuarioModificado);
+    //     }
+    //     return ResponseEntity.notFound().build();
+    // }
+    @PutMapping("/{idUsuario}")
+    public ResponseEntity<?> modificar(@PathVariable Long idUsuario, @RequestBody Usuario unUsuario) {
+        Optional<Usuario> usuarioOptional = service.findById(idUsuario);
+        
+        if (usuarioOptional.isPresent()) {
+            Usuario usuarioExistente = usuarioOptional.get();
+
+            usuarioExistente.setNombreCompleto(unUsuario.getNombreCompleto());
+            usuarioExistente.setCorreo(unUsuario.getCorreo());
+            usuarioExistente.setTelefono(unUsuario.getTelefono());
+            usuarioExistente.setRegion(unUsuario.getRegion());
+            usuarioExistente.setComuna(unUsuario.getComuna());
+            usuarioExistente.setEstado(unUsuario.getEstado());
+            usuarioExistente.setTipo(unUsuario.getTipo());
+
+
+            if (unUsuario.getContrasenia() != null && !unUsuario.getContrasenia().isEmpty()) {
+
+                usuarioExistente.setContrasenia(unUsuario.getContrasenia());
+            } 
+            // Si no se proporciona (es null o vacío), el service.save() 
+            // mantendrá el hash antiguo (gracias a la lógica que añadimos en UsuarioServiceImpl).
+            
+            Usuario usuarioModificado = service.save(usuarioExistente);
+            return ResponseEntity.ok(usuarioModificado);
+        }
+        return ResponseEntity.notFound().build();
     }
 
       @DeleteMapping("/{idUsuario}")
@@ -82,10 +129,4 @@ public class UsuarioController {
             return new ResponseEntity<>(errorMessage, HttpStatus.UNAUTHORIZED);
         }
     }
-
-
-
-
-
-
 }
