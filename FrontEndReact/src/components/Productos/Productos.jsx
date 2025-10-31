@@ -30,8 +30,19 @@ function Productos() {
       <div className="container">
         <div className="row mt-10 g-4">
           {productos.map((producto) => (
-            <div className="col-4" key={producto.id}>
+            <div className="col-4" key={producto.idProducto}>
               <div className="card color-card h-100">
+                <img
+                  src={producto.imagen}
+                  className="card-img-top"
+                  alt={producto.nombre}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src =
+                      "https://placehold.co/600x400/F8E8E8/FF87AB?text=Sin+Imagen";
+                  }}
+                />
+
                 <div className="card-body d-flex flex-column">
                   <h5 className="card-title">{producto.nombre}</h5>
                   <p className="card-text">{producto.descripcion}</p>

@@ -9,10 +9,14 @@ public interface UsuarioService {
 
     List<Usuario> findByAll();
 
-    Optional<Usuario> findById(Long id);
+    Optional<Usuario> findById(Long idUsuario);
 
     Usuario save(Usuario usuarioExistente);
 
     Optional<Usuario> delete(Usuario unUsuario);
+
+    Optional<Usuario> login(String correo, String contrasenia);
+
+
 
 }

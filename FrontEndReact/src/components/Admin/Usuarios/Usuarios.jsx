@@ -90,41 +90,44 @@ function Usuarios() {
             <th>ID</th>
             <th>Nombre Completo</th>
             <th>Correo</th>
-            <th>Región</th>
-            <th>Comuna</th>
-            <th>Teléfono</th>
+            <th>Tipo</th>
             <th>Estado</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {usuarios.map((usuario) => (
-            <tr key={usuario.id}>
-              <td>{usuario.id}</td>
-              <td>{usuario.nombreCompleto}</td>
-              <td>{usuario.correo}</td>
-              <td>{usuario.region}</td>
-              <td>{usuario.comuna}</td>
-              <td>{usuario.telefono}</td>
-              <td>{usuario.estado ? "Activo" : "Inactivo"}</td>
-              <td>
-                <div className="btn-group w-100" role="group">
-                  <button
-                    className="btn boton-modificar btn-sm"
-                    onClick={() => handleAbrirEditModal(usuario)}
-                  >
-                    Modificar
-                  </button>
-                  <button
-                    className="btn boton-eliminar btn-sm"
-                    onClick={() => handleEliminar(usuario.id)}
-                  >
-                    Eliminar
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
+          {usuarios.map((usuario) => {
+            // --- LÓGICA DE PROTECCIÓN ---
+            const esAdmin = usuario.tipo === "ADMIN";
+
+            return (
+              <tr key={usuario.idUsuario}>
+                <td>{usuario.idUsuario}</td>
+                <td>{usuario.nombreCompleto}</td>
+                <td>{usuario.correo}</td>
+                <td>{usuario.tipo}</td>
+                <td>{usuario.estado ? "Activo" : "Inactivo"}</td>
+                <td>
+                  <div className="btn-group w-100" role="group">
+                    <button
+                      className="btn boton-modificar btn-sm"
+                      onClick={() => handleAbrirEditModal(usuario)}
+                      disabled={esAdmin}
+                    >
+                      Modificar
+                    </button>
+                    <button
+                      className="btn boton-eliminar btn-sm"
+                      onClick={() => handleEliminar(usuario.idUsuario)}
+                      disabled={esAdmin}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
 

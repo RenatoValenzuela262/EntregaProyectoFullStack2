@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "./index.css";
 import Layout from "./components/Nav/Layout";
 import { Routes, Route } from "react-router-dom";
@@ -18,8 +17,6 @@ import AdmProductos from "./components/Admin/AdmProductos/AdmProductos.jsx";
 import Usuarios from "./components/Admin/Usuarios/Usuarios.jsx";
 
 function App() {
-  // const [count, setCount] = useState(0);
-
   return (
     <>
       <Layout>
@@ -34,13 +31,13 @@ function App() {
         </Routes>
       </Layout>
 
-      {/* <AdmLayout>
+      <AdmLayout>
         <Routes>
           <Route path="/Ordenes" element={<Ordenes />} />
           <Route path="/AdmProductos" element={<AdmProductos />} />
           <Route path="/Usuarios" element={<Usuarios />} />
         </Routes>
-      </AdmLayout> */}
+      </AdmLayout>
     </>
   );
 }
