@@ -1,11 +1,15 @@
 package com.backendmg.springboot_backendmg.entities;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
@@ -19,16 +23,22 @@ public class Orden {
     private String nombreCliente, estado;
     private LocalDate fecha;
     private Integer total;
-    
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "orden_id")
+    private List<DetalleOrden> detalles;
+
     public Orden() {
     }
 
-    public Orden(Long id, String nombreCliente, String estado, LocalDate fecha, Integer total) {
+    public Orden(Long id, String nombreCliente, String estado, LocalDate fecha, Integer total,
+            List<DetalleOrden> detalles) {
         this.id = id;
         this.nombreCliente = nombreCliente;
         this.estado = estado;
         this.fecha = fecha;
         this.total = total;
+        this.detalles = detalles;
     }
 
     public Long getId() {
@@ -71,7 +81,16 @@ public class Orden {
         this.total = total;
     }
 
+    public List<DetalleOrden> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<DetalleOrden> detalles) {
+        this.detalles = detalles;
+    }
 
     
+    
+
 }
 
