@@ -8,7 +8,7 @@ function CrearProducto({ onProductoCreado, onCancelar }) {
     descripcion: "",
     precio: "",
     stock: "",
-    imagen: "", // <-- 1. Añadido el campo de imagen al estado
+    imagen: "",
   });
 
   const handleChange = (e) => {
@@ -28,7 +28,6 @@ function CrearProducto({ onProductoCreado, onCancelar }) {
         headers: {
           "Content-Type": "application/json",
         },
-        // 'productoData' ahora incluye el campo 'imagen'
         body: JSON.stringify(productoData),
       });
 
@@ -94,7 +93,6 @@ function CrearProducto({ onProductoCreado, onCancelar }) {
           />
         </div>
 
-        {/* --- 2. NUEVO INPUT PARA LA URL DE LA IMAGEN --- */}
         <div className="mb-3">
           <label htmlFor="imagen-input" className="form-label">
             URL de la Imagen (Pinterest, etc.)
@@ -110,7 +108,6 @@ function CrearProducto({ onProductoCreado, onCancelar }) {
             placeholder="https://i.pinimg.com/..."
           />
         </div>
-        {/* --- FIN DEL NUEVO INPUT --- */}
 
         <div className="mb-3">
           <label htmlFor="precio-input" className="form-label">

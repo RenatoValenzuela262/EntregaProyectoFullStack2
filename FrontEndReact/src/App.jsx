@@ -13,7 +13,7 @@ import Carrito from "./components/Productos/Carrito.jsx";
 
 import AdmLayout from "./components/Admin/Nav/AdmLayout.jsx";
 
-import Ordenes from "./components/Admin/Ordenes";
+import Ordenes from "./components/Admin/Ordenes/Ordenes";
 import AdmProductos from "./components/Admin/AdmProductos/AdmProductos.jsx";
 import Usuarios from "./components/Admin/Usuarios/Usuarios.jsx";
 
@@ -23,28 +23,23 @@ function App() {
   return (
     <>
       {isAdmin ? (
-        // LAYOUT PARA ADMINISTRADORES
         <AdmLayout>
           <Routes>
-            {/* Rutas que pueden ver tanto admin como clientes */}
             <Route path="/Home" element={<Home />} />
             <Route path="/Productos" element={<Productos />} />
             <Route path="/Contactanos" element={<Contactanos />} />
             <Route path="/SobreNosotros" element={<SobreNosotros />} />
             <Route path="/Carrito" element={<Carrito />} />
 
-            {/* Rutas exclusivas de admin */}
             <Route path="/Ordenes" element={<Ordenes />} />
             <Route path="/AdmProductos" element={<AdmProductos />} />
             <Route path="/Usuarios" element={<Usuarios />} />
 
-            {/* Rutas de autenticación (por si necesitan cerrar sesión) */}
             <Route path="/IniciarSesion" element={<IniciarSesion />} />
             <Route path="/Registrarse" element={<Registrarse />} />
           </Routes>
         </AdmLayout>
       ) : (
-        // LAYOUT PARA CLIENTES Y USUARIOS NO LOGUEADOS
         <Layout>
           <Routes>
             <Route path="/Home" element={<Home />} />
@@ -55,7 +50,6 @@ function App() {
             <Route path="/Registrarse" element={<Registrarse />} />
             <Route path="/Carrito" element={<Carrito />} />
 
-            {/* Redirigir rutas de admin a Home si no tienen permisos */}
             <Route path="/Ordenes" element={<Home />} />
             <Route path="/AdmProductos" element={<Home />} />
             <Route path="/Usuarios" element={<Home />} />
@@ -63,7 +57,6 @@ function App() {
         </Layout>
       )}
 
-      {/* Ruta raíz por defecto */}
       <Routes>
         <Route path="/" element={<Home />} />
       </Routes>
