@@ -1,5 +1,6 @@
 import "./AdmNav.css";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../IniciarSesion/AuthContext";
 
 export function LogoHomeAdm() {
   return (
@@ -17,10 +18,12 @@ export function LogoHomeAdm() {
 }
 
 function AdmNav() {
+  const { currentUser, logout } = useAuth();
+
   return (
     <>
-      <aside className="sidebar">
-        <ul className="nav flex-column">
+      <aside className="sidebar d-flex flex-column h-100">
+        <ul className="nav flex-column flex-grow-1">
           <li className="nav-item texto-nav">
             <Link className="nav-link" to="/Ordenes">
               Ordenes
@@ -34,6 +37,11 @@ function AdmNav() {
           <li className="nav-item texto-nav">
             <Link className="nav-link" to="/Usuarios">
               Usuarios
+            </Link>
+          </li>
+          <li className="nav-item texto-nav">
+            <Link className="nav-link" to="/Usuarios" onClick={logout}>
+              Cerrar Sesión
             </Link>
           </li>
         </ul>

@@ -1,4 +1,5 @@
 import "./index.css";
+import { useAuth } from "./components/IniciarSesion/AuthContext";
 import Layout from "./components/Nav/Layout";
 import { Routes, Route } from "react-router-dom";
 
@@ -17,27 +18,55 @@ import AdmProductos from "./components/Admin/AdmProductos/AdmProductos.jsx";
 import Usuarios from "./components/Admin/Usuarios/Usuarios.jsx";
 
 function App() {
+  const { currentUser, isAdmin } = useAuth();
+
   return (
     <>
-      <Layout>
-        <Routes>
-          <Route path="/Home" element={<Home />} />
-          <Route path="/Productos" element={<Productos />} />
-          <Route path="/Contactanos" element={<Contactanos />} />
-          <Route path="/SobreNosotros" element={<SobreNosotros />} />
-          <Route path="/IniciarSesion" element={<IniciarSesion />} />
-          <Route path="/Registrarse" element={<Registrarse />} />
-          <Route path="/Carrito" element={<Carrito />} />
-        </Routes>
-      </Layout>
+      {isAdmin ? (
+        // LAYOUT PARA ADMINISTRADORES
+        <AdmLayout>
+          <Routes>
+            {/* Rutas que pueden ver tanto admin como clientes */}
+            <Route path="/Home" element={<Home />} />
+            <Route path="/Productos" element={<Productos />} />
+            <Route path="/Contactanos" element={<Contactanos />} />
+            <Route path="/SobreNosotros" element={<SobreNosotros />} />
+            <Route path="/Carrito" element={<Carrito />} />
 
-      <AdmLayout>
-        <Routes>
-          <Route path="/Ordenes" element={<Ordenes />} />
-          <Route path="/AdmProductos" element={<AdmProductos />} />
-          <Route path="/Usuarios" element={<Usuarios />} />
-        </Routes>
-      </AdmLayout>
+            {/* Rutas exclusivas de admin */}
+            <Route path="/Ordenes" element={<Ordenes />} />
+            <Route path="/AdmProductos" element={<AdmProductos />} />
+            <Route path="/Usuarios" element={<Usuarios />} />
+
+            {/* Rutas de autenticación (por si necesitan cerrar sesión) */}
+            <Route path="/IniciarSesion" element={<IniciarSesion />} />
+            <Route path="/Registrarse" element={<Registrarse />} />
+          </Routes>
+        </AdmLayout>
+      ) : (
+        // LAYOUT PARA CLIENTES Y USUARIOS NO LOGUEADOS
+        <Layout>
+          <Routes>
+            <Route path="/Home" element={<Home />} />
+            <Route path="/Productos" element={<Productos />} />
+            <Route path="/Contactanos" element={<Contactanos />} />
+            <Route path="/SobreNosotros" element={<SobreNosotros />} />
+            <Route path="/IniciarSesion" element={<IniciarSesion />} />
+            <Route path="/Registrarse" element={<Registrarse />} />
+            <Route path="/Carrito" element={<Carrito />} />
+
+            {/* Redirigir rutas de admin a Home si no tienen permisos */}
+            <Route path="/Ordenes" element={<Home />} />
+            <Route path="/AdmProductos" element={<Home />} />
+            <Route path="/Usuarios" element={<Home />} />
+          </Routes>
+        </Layout>
+      )}
+
+      {/* Ruta raíz por defecto */}
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
     </>
   );
 }
