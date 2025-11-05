@@ -12,9 +12,53 @@ function Registrarse() {
     comuna: "",
     telefono: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [correoExiste, setCorreoExiste] = useState(false);
+
+  const verificarCorreoExistente = async (correo) => {
+    if (!validarCorreo(correo)) return false;
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/usuarios/existe?correo=${encodeURIComponent(
+          correo
+        )}`
+      );
+      if (response.ok) {
+        const existe = await response.json();
+        return existe;
+      }
+      return false;
+    } catch (error) {
+      console.error("Error al verificar correo:", error);
+      return false;
+    }
+  };
+
+  const handleCorreoBlur = async (e) => {
+    const correo = e.target.value;
+
+    if (correo && validarCorreo(correo)) {
+      setLoading(true);
+      const existe = await verificarCorreoExistente(correo);
+      setCorreoExiste(existe);
+      if (existe) {
+        setError("Este correo electrónico ya está registrado");
+      } else {
+        setError("");
+      }
+      setLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "correo" && correoExiste) {
+      setCorreoExiste(false);
+      setError("");
+    }
 
     setUserData((prevData) => ({
       ...prevData,
@@ -24,6 +68,7 @@ function Registrarse() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
     if (userData.nombreCompleto.length > 100) {
       alert("El nombre no puede superar los 100 caracteres");
@@ -37,6 +82,25 @@ function Registrarse() {
 
     if (!validarCorreo(userData.correo)) {
       alert("El correo debe ser @duocuc.cl, @profesor.duoc.cl o @gmail.com");
+      return;
+    }
+
+    if (correoExiste) {
+      alert(
+        "El correo electrónico ya está registrado. Por favor usa otro correo."
+      );
+      return;
+    }
+
+    setLoading(true);
+    const correoDuplicado = await verificarCorreoExistente(userData.correo);
+    setLoading(false);
+
+    if (correoDuplicado) {
+      setError(
+        "El correo electrónico ya está registrado. Por favor usa otro correo."
+      );
+      setCorreoExiste(true);
       return;
     }
 
@@ -62,6 +126,7 @@ function Registrarse() {
     };
 
     try {
+      setLoading(true);
       const response = await fetch("http://localhost:8080/api/usuarios", {
         method: "POST",
         headers: {
@@ -78,15 +143,35 @@ function Registrarse() {
       const data = await response.json();
       console.log("Respuesta de Spring Boot:", data);
       alert("¡Usuario registrado con éxito!");
+
+      setUserData({
+        nombreCompleto: "",
+        correo: "",
+        contrasenia: "",
+        confirmarContrasenia: "",
+        region: "",
+        comuna: "",
+        telefono: "",
+      });
+      setError("");
+      setCorreoExiste(false);
     } catch (error) {
       console.error("Error al registrar:", error);
-      alert("Error al registrar: " + error.message);
+      setError("Error al registrar: " + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
       <div className="container">
+        {error && (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
           <div className="row justify-content-center">
             <div className="col-6">
@@ -112,13 +197,23 @@ function Registrarse() {
               </label>
               <input
                 type="email"
-                className="form-control"
+                className={`form-control ${correoExiste ? "is-invalid" : ""}`}
                 id="email-input"
                 required
                 name="correo"
                 value={userData.correo}
                 onChange={handleChange}
+                onBlur={handleCorreoBlur}
+                disabled={loading}
               ></input>
+              {correoExiste && (
+                <div className="invalid-feedback">
+                  Este correo electrónico ya está registrado
+                </div>
+              )}
+              {loading && (
+                <div className="form-text">Verificando correo...</div>
+              )}
             </div>
           </div>
 
@@ -179,7 +274,6 @@ function Registrarse() {
                 onChange={handleChange}
               >
                 <option value="">-- Elige una comuna --</option>
-
                 <option value="cerrillos">Cerrillos</option>
                 <option value="cerro-navia">Cerro Navia</option>
                 <option value="conchali">Conchalí</option>
@@ -255,8 +349,12 @@ function Registrarse() {
 
           <div className="row mt-3 justify-content-center">
             <div className="col-6">
-              <button type="submit" className="btn boton-registro">
-                Registrarse
+              <button
+                type="submit"
+                className="btn boton-registro"
+                disabled={loading || correoExiste}
+              >
+                {loading ? "Registrando..." : "Registrarse"}
               </button>
             </div>
           </div>

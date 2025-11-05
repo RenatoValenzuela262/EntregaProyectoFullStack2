@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
+import { useAuth } from "../../IniciarSesion/AuthContext";
 import CrearUsuario from "./CrearUsuario";
 import EditarUsuario from "./EditarUsuario";
 
@@ -8,6 +9,9 @@ function Usuarios() {
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
+
+  // ← Obtener las funciones de permisos del contexto
+  const { currentUser, puedeEditarUsuario, puedeEliminarUsuario } = useAuth();
 
   const fetchUsuarios = async () => {
     try {
@@ -49,7 +53,12 @@ function Usuarios() {
     fetchUsuarios();
   };
 
-  const handleEliminar = async (id) => {
+  const handleEliminar = async (id, usuario) => {
+    if (!puedeEliminarUsuario(usuario)) {
+      alert("No tienes permisos para eliminar este usuario");
+      return;
+    }
+
     if (
       !window.confirm("¿Estás seguro de que quieres eliminar este usuario?")
     ) {
@@ -57,8 +66,12 @@ function Usuarios() {
     }
 
     try {
+      // ← Enviar el usuario logueado en los headers
       const response = await fetch(`http://localhost:8080/api/usuarios/${id}`, {
         method: "DELETE",
+        headers: {
+          "Usuario-Logueado": JSON.stringify(currentUser), // ← Agregar este header
+        },
       });
 
       if (!response.ok) {
@@ -97,29 +110,52 @@ function Usuarios() {
         </thead>
         <tbody>
           {usuarios.map((usuario) => {
-            // --- LÓGICA DE PROTECCIÓN ---
-            const esAdmin = usuario.tipo === "ADMIN";
+            // --- NUEVA LÓGICA DE PERMISOS ---
+            const puedeEditar = puedeEditarUsuario(usuario);
+            const puedeEliminar = puedeEliminarUsuario(usuario);
 
             return (
               <tr key={usuario.idUsuario}>
                 <td>{usuario.idUsuario}</td>
                 <td>{usuario.nombreCompleto}</td>
                 <td>{usuario.correo}</td>
-                <td>{usuario.tipo}</td>
+                <td>
+                  <span
+                    className={`badge ${
+                      usuario.tipo === "ADMIN+"
+                        ? "bg-danger"
+                        : usuario.tipo === "ADMIN"
+                        ? "bg-warning"
+                        : "bg-primary"
+                    }`}
+                  >
+                    {usuario.tipo}
+                  </span>
+                </td>
                 <td>{usuario.estado ? "Activo" : "Inactivo"}</td>
                 <td>
                   <div className="btn-group w-100" role="group">
                     <button
                       className="btn boton-modificar btn-sm"
                       onClick={() => handleAbrirEditModal(usuario)}
-                      disabled={esAdmin}
+                      disabled={!puedeEditar}
+                      title={
+                        !puedeEditar
+                          ? "No tienes permisos para editar este usuario"
+                          : ""
+                      }
                     >
                       Modificar
                     </button>
                     <button
                       className="btn boton-eliminar btn-sm"
-                      onClick={() => handleEliminar(usuario.idUsuario)}
-                      disabled={esAdmin}
+                      onClick={() => handleEliminar(usuario.idUsuario, usuario)}
+                      disabled={!puedeEliminar}
+                      title={
+                        !puedeEliminar
+                          ? "No tienes permisos para eliminar este usuario"
+                          : ""
+                      }
                     >
                       Eliminar
                     </button>

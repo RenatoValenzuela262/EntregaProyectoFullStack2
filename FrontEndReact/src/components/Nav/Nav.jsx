@@ -1,6 +1,5 @@
 import "./Nav.css";
 import { Link } from "react-router-dom";
-// Corregido: Importa los contextos desde sus carpetas
 import { useCart } from "../Productos/CartContext";
 import { useAuth } from "../IniciarSesion/AuthContext";
 
@@ -16,7 +15,6 @@ export function LogoHome() {
 
 function Nav() {
   const { cartItems } = useCart();
-  // Corregido: usa 'currentUser' (del AuthContext) en lugar de 'user'
   const { currentUser, logout, isAdmin } = useAuth();
 
   const totalItems = cartItems.reduce(
@@ -43,21 +41,7 @@ function Nav() {
           </Link>
         </li>
 
-        {/* Lógica de Admin (si es admin, muestra los enlaces de admin) */}
-        {isAdmin && (
-          <>
-            <li className="nav-item">
-              <Link className="nav-link links-navegacion" to="/AdmProductos">
-                Adm. Productos
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link links-navegacion" to="/Usuarios">
-                Adm. Usuarios
-              </Link>
-            </li>
-          </>
-        )}
+        {/* Eliminé las pestañas de administración */}
 
         {/* Lógica de Login/Logout */}
         {currentUser ? (

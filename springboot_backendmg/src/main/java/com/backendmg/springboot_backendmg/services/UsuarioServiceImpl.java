@@ -43,12 +43,15 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Usuario save(Usuario unUsuario) {
         
         if (unUsuario.getContrasenia() != null && !unUsuario.getContrasenia().isEmpty()) {
-            String encodedPassword = passwordEncoder.encode(unUsuario.getContrasenia());
-            unUsuario.setContrasenia(encodedPassword);
+            // Solo hashear si la contraseña NO está vacía y parece ser texto plano
+            if (unUsuario.getContrasenia().length() < 60) { // Los hashes BCrypt son de 60 chars
+                String encodedPassword = passwordEncoder.encode(unUsuario.getContrasenia());
+                unUsuario.setContrasenia(encodedPassword);
+            }
+            // Si ya tiene 60+ caracteres, asumimos que ya está hasheada
             
         } else if (unUsuario.getIdUsuario() != null) {
-
-            // se recupera el hash antiguo para no sobreescribirlo con null/vacío.
+            // Si la contraseña está vacía o null, recuperar la actual de la BD
             repository.findById(unUsuario.getIdUsuario()).ifPresent(usuarioDb -> {
                 unUsuario.setContrasenia(usuarioDb.getContrasenia());
             });
@@ -88,6 +91,14 @@ public class UsuarioServiceImpl implements UsuarioService {
        
         return Optional.empty();
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Usuario> findByCorreo(String correo) {
+        return repository.findByCorreo(correo);
+    }
+
+
 }
 
 

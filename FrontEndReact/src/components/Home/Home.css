@@ -1,0 +1,7 @@
+.mensaje-bienvenida {
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  background-color: #ff8000 !important;
+  color: #643b3c !important;
+}
