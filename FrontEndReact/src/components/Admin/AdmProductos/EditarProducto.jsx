@@ -36,8 +36,6 @@ function EditarProducto({ producto, onProductoEditado, onCancelar }) {
     e.preventDefault();
 
     try {
-      // --- CORRECCIÓN DEFINITIVA AQUÍ ---
-      // El campo en tu JSON se llama 'idProducto', no 'id'
       const response = await fetch(
         `http://localhost:8080/api/productos/${producto.idProducto}`,
         {
@@ -65,8 +63,6 @@ function EditarProducto({ producto, onProductoEditado, onCancelar }) {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        {/* ... (el resto de tu formulario) ... */}
-
         <div className="mb-3">
           <label htmlFor="nombre-input" className="form-label">
             Nombre Producto

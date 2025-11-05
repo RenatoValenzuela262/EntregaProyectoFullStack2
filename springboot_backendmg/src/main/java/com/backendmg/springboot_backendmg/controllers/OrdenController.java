@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backendmg.springboot_backendmg.dto.CrearOrdenRequest;
-import com.backendmg.springboot_backendmg.dto.DetalleOrdenRequest;
 import com.backendmg.springboot_backendmg.entities.DetalleOrden;
 import com.backendmg.springboot_backendmg.entities.Orden;
 import com.backendmg.springboot_backendmg.services.OrdenService;
