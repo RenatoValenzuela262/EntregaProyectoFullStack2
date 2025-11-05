@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "../../IniciarSesion/AuthContext";
 import "./Usuarios.css";
 
 function EditarUsuario({ usuario, onUsuarioEditado, onCancelar }) {
@@ -9,10 +10,13 @@ function EditarUsuario({ usuario, onUsuarioEditado, onCancelar }) {
     comuna: "",
     telefono: "",
     estado: true,
+    tipo: "",
   });
 
   const [contrasenia, setContrasenia] = useState("");
   const [confirmarContrasenia, setConfirmarContrasenia] = useState("");
+
+  const { currentUser, isSuperAdmin } = useAuth();
 
   useEffect(() => {
     if (usuario) {
@@ -23,6 +27,7 @@ function EditarUsuario({ usuario, onUsuarioEditado, onCancelar }) {
         comuna: usuario.comuna,
         telefono: usuario.telefono,
         estado: usuario.estado,
+        tipo: usuario.tipo,
       });
       setContrasenia("");
       setConfirmarContrasenia("");
@@ -57,8 +62,10 @@ function EditarUsuario({ usuario, onUsuarioEditado, onCancelar }) {
       comuna: userData.comuna,
       telefono: userData.telefono,
       estado: userData.estado,
+      tipo: userData.tipo,
     };
 
+    // SOLO agregar contraseña si no está vacía
     if (contrasenia !== "") {
       if (contrasenia !== confirmarContrasenia) {
         alert("Las nuevas contraseñas no coinciden");
@@ -73,10 +80,13 @@ function EditarUsuario({ usuario, onUsuarioEditado, onCancelar }) {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/usuarios/${usuario.id}`,
+        `http://localhost:8080/api/usuarios/${usuario.idUsuario}`,
         {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "Usuario-Logueado": JSON.stringify(currentUser),
+          },
           body: JSON.stringify(usuarioActualizado),
         }
       );
@@ -124,6 +134,27 @@ function EditarUsuario({ usuario, onUsuarioEditado, onCancelar }) {
           name="correo"
           value={userData.correo}
         />
+      </div>
+
+      <div className="mb-3">
+        <label htmlFor="select-tipo">Tipo de Usuario:</label>
+        <select
+          id="select-tipo"
+          className="form-select"
+          required
+          name="tipo"
+          value={userData.tipo}
+          onChange={handleChange}
+          disabled={!isSuperAdmin}
+        >
+          <option value="CLIENTE">Cliente</option>
+          <option value="ADMIN">Admin</option>
+        </select>
+        {!isSuperAdmin && (
+          <div className="form-text">
+            Solo Admin+ puede modificar el tipo de usuario
+          </div>
+        )}
       </div>
 
       <hr />

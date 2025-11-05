@@ -6,15 +6,10 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  // --- CAMBIO 1: Renombramos 'user' a 'currentUser' ---
   const [currentUser, setCurrentUser] = useState(null);
-
-  // Añadimos un estado de carga para evitar "parpadeos"
   const [isLoading, setIsLoading] = useState(true);
-
   const navigate = useNavigate();
 
-  // Este useEffect lee el localStorage SOLO una vez al cargar la app
   useEffect(() => {
     const storedUser = localStorage.getItem("currentUser");
     if (storedUser) {
@@ -24,12 +19,10 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (userData) => {
-    // Usamos 'currentUser' para guardar
     localStorage.setItem("currentUser", JSON.stringify(userData));
     setCurrentUser(userData);
 
-    // Redirigimos según el tipo de usuario
-    if (userData.tipo === "ADMIN") {
+    if (userData.tipo === "ADMIN" || userData.tipo === "ADMIN+") {
       navigate("/admin/usuarios");
     } else {
       navigate("/Home");
@@ -42,17 +35,78 @@ export const AuthProvider = ({ children }) => {
     navigate("/IniciarSesion");
   };
 
-  // --- CAMBIO 2: Añadimos 'isAdmin' (que Nav.jsx necesita) ---
-  const isAdmin = currentUser?.tipo === "ADMIN";
+  // --- FUNCIONES DE PERMISOS ---
+  const hasPermission = (requiredType) => {
+    if (!currentUser) return false;
 
-  // No renderizamos la app hasta que sepamos si hay un usuario logueado
+    const userType = currentUser.tipo;
+
+    // Jerarquía de permisos
+    const permissions = {
+      CLIENTE: ["CLIENTE"],
+      ADMIN: ["CLIENTE", "ADMIN"],
+      "ADMIN+": ["CLIENTE", "ADMIN", "ADMIN+"],
+    };
+
+    return permissions[userType]?.includes(requiredType) || false;
+  };
+
+  const puedeEditarUsuario = (usuarioTarget) => {
+    if (!currentUser) return false;
+
+    // Admin+ puede editar a todos
+    if (currentUser.tipo === "ADMIN+") return true;
+
+    // Admin normal solo puede editar Clientes
+    if (currentUser.tipo === "ADMIN" && usuarioTarget.tipo === "CLIENTE") {
+      return true;
+    }
+
+    return false;
+  };
+
+  const puedeEliminarUsuario = (usuarioTarget) => {
+    if (!currentUser) return false;
+
+    // Nadie puede eliminarse a sí mismo - CORREGIR ESTA LÍNEA
+    if (currentUser.idUsuario === usuarioTarget.idUsuario) return false;
+
+    // Admin+ puede eliminar a todos excepto a sí mismo
+    if (
+      currentUser.tipo === "ADMIN+" &&
+      currentUser.idUsuario !== usuarioTarget.idUsuario
+    )
+      return true;
+
+    // Admin normal solo puede eliminar Clientes
+    if (currentUser.tipo === "ADMIN" && usuarioTarget.tipo === "CLIENTE") {
+      return true;
+    }
+
+    return false;
+  };
+
+  const isAdmin =
+    currentUser?.tipo === "ADMIN" || currentUser?.tipo === "ADMIN+";
+  const isSuperAdmin = currentUser?.tipo === "ADMIN+";
+
   if (isLoading) {
-    return null; // O un <Spinner />
+    return null;
   }
 
   return (
-    // --- CAMBIO 3: Pasamos 'currentUser' y 'isAdmin' en el value ---
-    <AuthContext.Provider value={{ currentUser, login, logout, isAdmin }}>
+    <AuthContext.Provider
+      value={{
+        currentUser,
+        login,
+        logout,
+        isAdmin,
+        isSuperAdmin,
+        hasPermission,
+        puedeEditarUsuario,
+        puedeEliminarUsuario,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

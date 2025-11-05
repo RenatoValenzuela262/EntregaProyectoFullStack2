@@ -17,6 +17,6 @@ public interface UsuarioService {
 
     Optional<Usuario> login(String correo, String contrasenia);
 
-
-
+    Optional<Usuario> findByCorreo(String correo);
+    
 }
