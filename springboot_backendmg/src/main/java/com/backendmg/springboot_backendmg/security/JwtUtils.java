@@ -18,16 +18,11 @@ import java.util.function.Function;
 @Component
 public class JwtUtils {
 
-    // Se inyectan las propiedades definidas en application.properties
     @Value("${jwt.secret}")
     private String secret;
 
     @Value("${jwt.token.validity}")
     private long jwtTokenValidity;
-    
-    // =========================================================
-    // 1. OBTENCIÓN DE DATOS DEL TOKEN (CLAIMS)
-    // =========================================================
 
     // Obtiene el nombre de usuario (o Subject) del token
     public String getUsernameFromToken(String token) {
@@ -54,9 +49,6 @@ public class JwtUtils {
                 .getBody();
     }
     
-    // =========================================================
-    // 2. GENERACIÓN DEL TOKEN
-    // =========================================================
 
     // Genera el token principal
     public String generateToken(UserDetails userDetails) {
@@ -77,9 +69,6 @@ public class JwtUtils {
                 .compact();
     }
     
-    // =========================================================
-    // 3. VALIDACIÓN DEL TOKEN
-    // =========================================================
 
     // Verifica si el token expiró
     private Boolean isTokenExpired(String token) {
