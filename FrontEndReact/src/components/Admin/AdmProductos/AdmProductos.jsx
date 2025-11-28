@@ -123,7 +123,6 @@ function AdmProductos() {
                     </button>
                     <button
                       className="btn boton-eliminar btn-sm me-2"
-                      // --- Y CAMBIO AQUÍ ---
                       onClick={() => handleEliminar(producto.idProducto)}
                     >
                       Eliminar
@@ -134,8 +133,6 @@ function AdmProductos() {
             ))}
           </tbody>
         </table>
-
-        {/* ... (tus modales se quedan igual) ... */}
 
         <Modal show={showModal} onHide={handleCerrarModal}>
           <Modal.Header closeButton>

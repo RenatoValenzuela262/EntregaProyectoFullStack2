@@ -11,6 +11,9 @@ function Carrito() {
     0
   );
 
+  const IVA_RATE = 0.19; // 19% IVA
+  const formatter = new Intl.NumberFormat("es-CL");
+
   const procederAlPago = async () => {
     if (!currentUser) {
       alert("Debes iniciar sesión para proceder al pago");
@@ -23,13 +26,43 @@ function Carrito() {
     }
 
     try {
+      const subtotal = total;
+      const iva = +(subtotal * IVA_RATE).toFixed(0);
+      const totalConIVA = subtotal + iva;
+
+      const detallesTexto = cartItems
+        .map(
+          (item, idx) =>
+            `${idx + 1}. ${item.nombre} — ${
+              item.quantity
+            } x $${formatter.format(item.precio)} = $${formatter.format(
+              item.precio * item.quantity
+            )}`
+        )
+        .join("\n");
+
+      const mensaje = `Resumen de la compra:\n\n${detallesTexto}\n\nSubtotal: $${formatter.format(
+        subtotal
+      )}\nIVA (${Math.round(IVA_RATE * 100)}%): $${formatter.format(
+        iva
+      )}\nTotal a pagar: $${formatter.format(
+        totalConIVA
+      )}\n\n¿Deseas confirmar el pago?`;
+
+      const confirmado = window.confirm(mensaje);
+      if (!confirmado) return;
+
       const ordenRequest = {
         nombreCliente: currentUser.nombreCompleto,
         detalles: cartItems.map((item) => ({
           nombreProducto: item.nombre,
           cantidad: item.quantity,
           precioUnitario: item.precio,
+          subtotal: item.precio * item.quantity,
         })),
+        subtotal,
+        iva,
+        total: totalConIVA,
       };
 
       const response = await fetch(
@@ -45,10 +78,16 @@ function Carrito() {
 
       if (response.ok) {
         const ordenCreada = await response.json();
-        alert(`¡Orden creada exitosamente! Número de orden: ${ordenCreada.id}`);
+        alert(
+          `¡Orden creada exitosamente! Número de orden: ${
+            ordenCreada.id
+          }\nTotal pagado: $${formatter.format(totalConIVA)}`
+        );
 
         // Limpiar carrito
-        cartItems.forEach((item) => removeFromCart(item.id));
+        // Hacemos una copia para evitar mutaciones mientras iteramos
+        const itemsCopy = [...cartItems];
+        itemsCopy.forEach((item) => removeFromCart(item.id));
 
         // Redirigir a página de confirmación o home
         window.location.href = "/Home";
@@ -123,12 +162,28 @@ function Carrito() {
 
           <hr />
 
-          <div className="text-end">
-            <h3>Total: ${new Intl.NumberFormat("es-CL").format(total)}</h3>
-            <button className="btn boton-pagar" onClick={procederAlPago}>
-              Proceder al Pago
-            </button>
-          </div>
+          {(() => {
+            const subtotal = total;
+            const iva = +(subtotal * IVA_RATE).toFixed(0);
+            const totalConIVA = subtotal + iva;
+            return (
+              <div className="text-end resumen-totales">
+                <p>
+                  <strong>Subtotal:</strong> ${formatter.format(subtotal)}
+                </p>
+                <p>
+                  <strong>IVA ({Math.round(IVA_RATE * 100)}%):</strong> $
+                  {formatter.format(iva)}
+                </p>
+                <h3>
+                  <strong>Total:</strong> ${formatter.format(totalConIVA)}
+                </h3>
+                <button className="btn boton-pagar" onClick={procederAlPago}>
+                  Proceder al Pago
+                </button>
+              </div>
+            );
+          })()}
         </>
       )}
     </div>
