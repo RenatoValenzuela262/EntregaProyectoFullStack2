@@ -2,11 +2,11 @@ import {render, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { vi } from 'vitest'
-import Registrarse from './Registrarse'
+import CrearProducto from './CrearProducto'
 
 const renderWithRouter = (ui) => render(<MemoryRouter>{ui}</MemoryRouter>)
 
-describe('Registrarse.jsx', () => {
+describe('CrearProducto.jsx', () => {
     const originalFetch  = global.fetch
     const originalConfirm = window.confirm
     const originalAlert = window.alert
@@ -27,11 +27,10 @@ describe('Registrarse.jsx', () => {
         window.alert = originalAlert
     })
 
-    test('Carga y muestra usuarios correctamente', async () => {
+    test('Carga y muestra productos correctamente', async () => {
         const mockData = [
-            {nombreCompleto: "Prueba usuario 1", correo: "testusuario1@duocuc.cl", contrasenia: "testusuario1pass", confirmarContrasenia: "testusuario1pass", region: "metropolitana", comuna: "Santiago", telefono: "944448888"},
-            {nombreCompleto: "Prueba usuario 2", correo: "testusuario2@gmail.com", contrasenia: "testusuario2pass", confirmarContrasenia: "testusuario2pass", region: "metropolitana", comuna: "Peñaflor", telefono: "988884444"},
-            {nombreCompleto: "Prueba usuario 3", correo: "testusuario2@profe.duoc.cl", contrasenia: "testusuario3pass", confirmarContrasenia: "testusuario3pass", region: "metropolitana", comuna: "Maipu", telefono: "944884488"}
+            {nombre: "Cucurucho", categoria: "Galleta", descripcion: "Galleta en forma de cono para hacer helados artesanales o de maquina", precio: 2800, stock: 45, imagen: "https://i.pinimg.com/736x/fe/2d/68/fe2d68a30b3b53b227f1f9c384c0e32b.jpg"},
+            {nombre: "Macaron", categoria: "Bizcocho", descripcion: "Bizcochos de colores con distintas texturas y sabores", precio: 3200, stock: 15, imagen: "https://i.pinimg.com/736x/c2/bb/1d/c2bb1dd2e0bd020a47b007c6c84cce7a.jpg"}
         ]
 
         global.fetch.mockResolvedValueOnce({
