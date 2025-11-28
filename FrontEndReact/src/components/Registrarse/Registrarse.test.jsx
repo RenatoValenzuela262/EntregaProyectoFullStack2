@@ -1,42 +1,35 @@
-import {render, screen} from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
-import { vi } from 'vitest'
-import Registrarse from './Registrarse'
+import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import { describe, test, expect } from "vitest";
+import Registrarse from "./Registrarse";
 
-const renderWithRouter = (ui) => render(<MemoryRouter>{ui}</MemoryRouter>)
+// Helper para renderizar con el router
+const renderWithRouter = (ui) => {
+  return render(<MemoryRouter>{ui}</MemoryRouter>);
+};
 
-describe('Registrarse.jsx', () => {
-    const originalFetch  = global.fetch
-    const originalConfirm = window.confirm
-    const originalAlert = window.alert
+describe("Registrarse.jsx", () => {
+  test("Muestra el formulario de registro correctamente", () => {
+    renderWithRouter(<Registrarse />);
 
-    beforeEach(() => {
-        global.fetch = vi.fn()
-        window.confirm = vi.fn().mockReturnValue(true)
-        window.alert = vi.fn()
-    })
+    // Verificar que los campos principales del formulario estén presentes
+    expect(screen.getByLabelText(/nombre completo/i)).toBeInTheDocument();
+    // The component uses "Email" as label instead of "Correo Electrónico"
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    // Target the specific password input by its id to avoid matching the confirm field
+    expect(
+      screen.getByLabelText(/contraseña/i, { selector: "input#password-input" })
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText(/confirmar contraseña/i)).toBeInTheDocument();
+    // Region / comuna use longer labels
+    expect(screen.getByLabelText(/selecciona tu región/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/selecciona tu comuna/i)).toBeInTheDocument();
+    // Phone label has an accent in the component
+    expect(screen.getByLabelText(/télefono|telefono/i)).toBeInTheDocument();
 
-    afterEach(() => {
-        vi.clearAllMocks()
-    })
-
-    afterAll(() => {
-        global.fetch = originalFetch
-        window.confirm = originalConfirm
-        window.alert = originalAlert
-    })
-
-    test('Carga y muestra usuarios correctamente', async () => {
-        const mockData = [
-            {nombreCompleto: "Prueba usuario 1", correo: "testusuario1@duocuc.cl", contrasenia: "testusuario1pass", confirmarContrasenia: "testusuario1pass", region: "metropolitana", comuna: "Santiago", telefono: "944448888"},
-            {nombreCompleto: "Prueba usuario 2", correo: "testusuario2@gmail.com", contrasenia: "testusuario2pass", confirmarContrasenia: "testusuario2pass", region: "metropolitana", comuna: "Peñaflor", telefono: "988884444"},
-            {nombreCompleto: "Prueba usuario 3", correo: "testusuario2@profe.duoc.cl", contrasenia: "testusuario3pass", confirmarContrasenia: "testusuario3pass", region: "metropolitana", comuna: "Maipu", telefono: "944884488"}
-        ]
-
-        global.fetch.mockResolvedValueOnce({
-            pk: true,
-            json: async () => mockData
-        })
-    })
-})
+    // Verificar que el botón de registro exista
+    expect(
+      screen.getByRole("button", { name: /registrarse/i })
+    ).toBeInTheDocument();
+  });
+});

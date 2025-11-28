@@ -5,14 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a0b3260f-aae5-402e-9232-a055414d63b0" name="Changes" comment="Esquema para testing">
-      <change afterPath="$PROJECT_DIR$/FrontEndReact/src/components/Admin/AdmProductos/CrearProducto.test.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEndReact/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEndReact/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEndReact/src/components/Admin/AdmProductos/AdmProductos.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEndReact/src/components/Admin/AdmProductos/AdmProductos.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEndReact/src/components/IniciarSesion/IniciarSesion.test.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEndReact/src/components/Admin/Nav/AdmNav.test.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEndReact/src/components/Nav/Nav.test.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEndReact/src/components/Nav/Nav.test.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEndReact/src/components/Productos/Productos.test.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEndReact/src/components/Admin/Usuarios/CrearUsuario.test.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEndReact/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEndReact/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEndReact/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FrontEndReact/src/components/Registrarse/Registrarse.test.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEndReact/src/components/Registrarse/Registrarse.test.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEndReact/src/setupTests.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEndReact/src/setupTests.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +53,7 @@
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;renato&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/renax/OneDrive/Documentos/EntregaProyectoFullStack2&quot;,
@@ -95,6 +91,8 @@
       <updated>1764114815323</updated>
       <workItem from="1764114817255" duration="2298000" />
       <workItem from="1764266606606" duration="9697000" />
+      <workItem from="1764304088183" duration="1059000" />
+      <workItem from="1764306798477" duration="337000" />
     </task>
     <task id="LOCAL-00001" summary="Esquema para testing">
       <option name="closed" value="true" />
