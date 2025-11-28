@@ -8,13 +8,11 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
   const addToCart = (producto) => {
-    // Validar que el producto tenga un identificador único
     if (!producto.id && !producto.nombre) {
       console.error("Producto sin identificador único:", producto);
       return;
     }
 
-    // Usar id si existe, sino usar nombre como fallback
     const identifier = producto.id || producto.nombre;
 
     setCartItems((prevItems) => {
@@ -33,7 +31,7 @@ export const CartProvider = ({ children }) => {
           ...prevItems,
           {
             ...producto,
-            id: producto.id || identifier, // Asegurar que tenga id
+            id: producto.id || identifier,
             quantity: 1,
           },
         ];
