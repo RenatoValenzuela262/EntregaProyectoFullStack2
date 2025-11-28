@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -66,6 +67,10 @@ public class OrdenController {
                     Integer precioUnitarioInt = precioUnitarioDouble == null ? 0 : (int) Math.round(precioUnitarioDouble);
                     detalle.setPrecioUnitario(precioUnitarioInt);
                     detalle.setSubTotal(detalleRequest.getCantidad() * precioUnitarioInt);
+                    // guardar correo del cliente en cada detalle para trazabilidad
+                    if (request.getCorreo() != null) {
+                        detalle.setCorreoCliente(request.getCorreo());
+                    }
                     return detalle;
                 })
                 .collect(Collectors.toList());
@@ -75,6 +80,10 @@ public class OrdenController {
             // Guardar el total con IVA incluido (enviado desde el frontend)
             Integer total = request.getTotal() != null ? request.getTotal() : 0;
             orden.setTotal(total);
+            // Guardar correo del cliente si se envía
+            if (request.getCorreo() != null) {
+                orden.setCorreoCliente(request.getCorreo());
+            }
             
             Orden ordenCreada = service.save(orden);
             return ResponseEntity.status(HttpStatus.CREATED).body(ordenCreada);
@@ -82,6 +91,16 @@ public class OrdenController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Error al crear la orden: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/usuario")
+    public ResponseEntity<?> obtenerPorCorreo(@RequestParam String correo) {
+        try {
+            List<Orden> ordenes = service.findByCorreo(correo);
+            return ResponseEntity.ok(ordenes);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener historial: " + e.getMessage());
         }
     }
 

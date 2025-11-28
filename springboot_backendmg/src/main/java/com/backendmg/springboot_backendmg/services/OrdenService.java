@@ -16,4 +16,6 @@ public interface OrdenService {
 
     Optional<Orden> delete(Orden unOrden);
 
+    List<Orden> findByCorreo(String correo);
+
 }

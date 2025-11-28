@@ -54,6 +54,7 @@ function Carrito() {
 
       const ordenRequest = {
         nombreCliente: currentUser.nombreCompleto,
+        correo: currentUser.correo, // enviamos correo para poder buscar historial
         detalles: cartItems.map((item) => ({
           nombreProducto: item.nombre,
           cantidad: item.quantity,

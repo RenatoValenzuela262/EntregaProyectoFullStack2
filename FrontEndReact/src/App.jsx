@@ -16,6 +16,7 @@ import AdmLayout from "./components/Admin/Nav/AdmLayout.jsx";
 import Ordenes from "./components/Admin/Ordenes/Ordenes";
 import AdmProductos from "./components/Admin/AdmProductos/AdmProductos.jsx";
 import Usuarios from "./components/Admin/Usuarios/Usuarios.jsx";
+import HistorialCompras from "./components/HistorialCompras/HistorialCompras";
 
 function App() {
   const { currentUser, isAdmin } = useAuth();
@@ -49,6 +50,7 @@ function App() {
             <Route path="/IniciarSesion" element={<IniciarSesion />} />
             <Route path="/Registrarse" element={<Registrarse />} />
             <Route path="/Carrito" element={<Carrito />} />
+            <Route path="/Historial" element={<HistorialCompras />} />
 
             <Route path="/Ordenes" element={<Home />} />
             <Route path="/AdmProductos" element={<Home />} />

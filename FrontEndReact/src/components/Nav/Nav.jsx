@@ -52,6 +52,11 @@ function Nav() {
               </span>
             </li>
             <li className="nav-item">
+              <Link className="nav-link links-navegacion" to="/Historial">
+                Historial
+              </Link>
+            </li>
+            <li className="nav-item">
               <button
                 className="btn nav-link links-navegacion"
                 onClick={logout}

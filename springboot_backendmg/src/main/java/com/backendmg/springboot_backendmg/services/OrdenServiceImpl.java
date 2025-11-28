@@ -45,4 +45,10 @@ public class OrdenServiceImpl implements OrdenService{
         return ordenOptional;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<Orden> findByCorreo(String correo) {
+        return repository.findByCorreoCliente(correo);
+    }
+
 }

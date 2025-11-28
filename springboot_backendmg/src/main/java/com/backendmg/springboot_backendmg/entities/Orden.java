@@ -21,6 +21,7 @@ public class Orden {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombreCliente, estado;
+    private String correoCliente;
     private LocalDate fecha;
     private Integer total;
 
@@ -39,6 +40,14 @@ public class Orden {
         this.fecha = fecha;
         this.total = total;
         this.detalles = detalles;
+    }
+
+    public String getCorreoCliente() {
+        return correoCliente;
+    }
+
+    public void setCorreoCliente(String correoCliente) {
+        this.correoCliente = correoCliente;
     }
 
     public Long getId() {

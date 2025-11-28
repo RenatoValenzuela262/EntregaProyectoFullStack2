@@ -16,15 +16,17 @@ public class DetalleOrden {
 
     private String nombreProducto;
     private Integer cantidad, precioUnitario, subTotal;
+    private String correoCliente;
 
     public DetalleOrden() {
     }
-    public DetalleOrden(Long id, String nombreProducto, Integer cantidad, Integer precioUnitario, Integer subTotal) {
+    public DetalleOrden(Long id, String nombreProducto, Integer cantidad, Integer precioUnitario, Integer subTotal, String correoCliente) {
         this.id = id;
         this.nombreProducto = nombreProducto;
         this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
         this.subTotal = subTotal;
+        this.correoCliente = correoCliente;
     }
     public Long getId() {
         return id;
@@ -56,6 +58,14 @@ public class DetalleOrden {
     public void setSubTotal(Integer subTotal) {
         this.subTotal = subTotal;
     } 
+
+    public String getCorreoCliente() {
+        return correoCliente;
+    }
+
+    public void setCorreoCliente(String correoCliente) {
+        this.correoCliente = correoCliente;
+    }
 
     
     
