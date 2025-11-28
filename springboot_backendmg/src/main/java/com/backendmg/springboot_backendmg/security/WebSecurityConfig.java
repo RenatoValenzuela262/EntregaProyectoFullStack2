@@ -58,8 +58,9 @@ public class WebSecurityConfig {
             // Definición de reglas de autorización para endpoints
             .authorizeHttpRequests(authorize -> authorize
                 // Permite el acceso sin autenticación al endpoint de login y registro
-                .requestMatchers("/auth/login", "/api/usuarios", "/api/productos").permitAll()
-                
+                // Hacemos públicos los endpoints de usuarios (registro/login), productos y crear orden desde el carrito
+                .requestMatchers("/auth/login", "/api/usuarios/**", "/api/productos", "/api/orden/desde-carrito").permitAll()
+
                 // TODAS las demás solicitudes deben estar autenticadas
                 .anyRequest().authenticated()
             );

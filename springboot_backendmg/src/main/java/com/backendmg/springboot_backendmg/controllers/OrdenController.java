@@ -60,17 +60,20 @@ public class OrdenController {
                     DetalleOrden detalle = new DetalleOrden();
                     detalle.setNombreProducto(detalleRequest.getNombreProducto());
                     detalle.setCantidad(detalleRequest.getCantidad());
-                    detalle.setPrecioUnitario(detalleRequest.getPrecioUnitario());
-                    detalle.setSubTotal(detalleRequest.getCantidad() * detalleRequest.getPrecioUnitario());
+                    // precioUnitario puede venir con decimales desde el frontend
+                    // redondeamos al entero más cercano para almacenarlo (en pesos)
+                    Double precioUnitarioDouble = detalleRequest.getPrecioUnitario();
+                    Integer precioUnitarioInt = precioUnitarioDouble == null ? 0 : (int) Math.round(precioUnitarioDouble);
+                    detalle.setPrecioUnitario(precioUnitarioInt);
+                    detalle.setSubTotal(detalleRequest.getCantidad() * precioUnitarioInt);
                     return detalle;
                 })
                 .collect(Collectors.toList());
             
             orden.setDetalles(detalles);
             
-            Integer total = detalles.stream()
-                .mapToInt(DetalleOrden::getSubTotal)
-                .sum();
+            // Guardar el total con IVA incluido (enviado desde el frontend)
+            Integer total = request.getTotal() != null ? request.getTotal() : 0;
             orden.setTotal(total);
             
             Orden ordenCreada = service.save(orden);

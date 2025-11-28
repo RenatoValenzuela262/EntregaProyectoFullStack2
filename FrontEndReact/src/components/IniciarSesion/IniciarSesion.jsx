@@ -25,6 +25,29 @@ function IniciarSesion() {
     e.preventDefault();
 
     try {
+      // 1) Pedimos el token JWT
+      const authResponse = await fetch("http://localhost:8080/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          correo: loginData.correo,
+          contrasenia: loginData.contrasenia,
+        }),
+      });
+
+      if (!authResponse.ok) {
+        const err = await authResponse.text();
+        alert(`Error al autenticar: ${err}`);
+        return;
+      }
+
+      const authData = await authResponse.json();
+      const token = authData.jwtToken || authData.token || null;
+      if (token) {
+        localStorage.setItem("token", token);
+      }
+
+      // 2) Obtenemos el usuario (datos) usando el endpoint existente
       const response = await fetch("http://localhost:8080/api/usuarios/login", {
         method: "POST",
         headers: {
@@ -38,7 +61,7 @@ function IniciarSesion() {
 
       if (response.ok) {
         const userData = await response.json();
-        // Llamamos a la función 'login' del contexto
+        // Guardamos el usuario en el contexto (el token ya está en localStorage)
         login(userData);
       } else {
         const errorMessage = await response.text();

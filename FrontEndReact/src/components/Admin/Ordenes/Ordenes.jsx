@@ -8,8 +8,21 @@ function Ordenes() {
 
   const fetchOrdenes = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/orden");
+      const headers = { "Content-Type": "application/json" };
+      const token = localStorage.getItem("token");
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
+      const response = await fetch("http://localhost:8080/api/orden", {
+        headers,
+      });
       if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error(
+            "No autorizado. Por favor inicia sesión como administrador."
+          );
+        }
         throw new Error("No se pudieron cargar las órdenes");
       }
       const data = await response.json();

@@ -36,14 +36,23 @@ function EditarProducto({ producto, onProductoEditado, onCancelar }) {
     e.preventDefault();
 
     try {
+      const token = localStorage.getItem("token");
+      const headers = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
+      // Asegurar tipos numéricos para backend
+      const payload = {
+        ...productoData,
+        precio: productoData.precio !== "" ? Number(productoData.precio) : 0,
+        stock: productoData.stock !== "" ? Number(productoData.stock) : 0,
+      };
+
       const response = await fetch(
         `http://localhost:8080/api/productos/${producto.idProducto}`,
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(productoData),
+          headers,
+          body: JSON.stringify(payload),
         }
       );
 
